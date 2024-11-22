@@ -21,6 +21,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@mail.io',
         ]);
 
+        User::factory()->create([
+            'name' => 'dev',
+            'username' => 'dev',
+            'email' => 'dev@mail.io',
+        ]);
+
         $this->call([
             RoleSeeder::class,
         ]);

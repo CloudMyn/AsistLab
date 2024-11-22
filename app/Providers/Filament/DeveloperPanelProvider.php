@@ -2,19 +2,14 @@
 
 namespace App\Providers\Filament;
 
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
-use App\Filament\Admin\Themes\SknorTheme;
-use App\Filament\Widgets\AccountWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\MenuItem;
-use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
+use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -22,36 +17,39 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use Filament\Navigation\MenuItem;
+use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 
-class AdminPanelProvider extends PanelProvider
+class DeveloperPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('developer')
+            ->path('developer')
             ->brandLogo('/logo.png')
             ->login(\App\Filament\Auth\CustomLogin::class)
             ->passwordReset()
-            ->registration()
             ->colors([
-                'primary' => Color::Orange,
+                'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/Developer/Resources'), for: 'App\\Filament\\Developer\\Resources')
+            ->discoverPages(in: app_path('Filament/Developer/Pages'), for: 'App\\Filament\\Developer\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Developer/Widgets'), for: 'App\\Filament\\Developer\\Widgets')
+            ->widgets([
+                Widgets\AccountWidget::class,
+                Widgets\FilamentInfoWidget::class,
+            ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->widgets([
-                AccountWidget::class
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -90,6 +88,8 @@ class AdminPanelProvider extends PanelProvider
                         rules: 'mimes:jpeg,png|max:' . 1024 * 3 //only accept jpeg and png files with a maximum size of 3MB
                     ),
 
+                \BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin::make(),
+
                 \Hasnayeen\Themes\ThemesPlugin::make()
                     ->canViewThemesPage(fn() => true)
                     ->registerTheme(
@@ -101,18 +101,27 @@ class AdminPanelProvider extends PanelProvider
                         override: true,
                     ),
 
+                FilamentSpatieRolesPermissionsPlugin::make(),
+
+                EnvironmentIndicatorPlugin::make()
+                    ->showBadge(true)
+                    ->showBorder(false)
+                    ->showGitBranch(),
+
                 FilamentEnvEditorPlugin::make()
                     ->navigationGroup(fn() => __('app.settings'))
                     ->navigationLabel(fn() => __('app.env_editor'))
                     ->navigationIcon('heroicon-o-cog-8-tooth')
                     ->navigationSort(1)
-                    ->authorize(false)
-                    ->slug('env-editor'),
+                    ->slug('env-editor')
             ])
             ->spa(config('dashboard.panel.single_page_aplication'))
             ->databaseNotifications()
+
             ->navigationGroups([
                 __('app.navigation.user_management'),
+                __('filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'),
+                __('app.settings'),
             ])
             ->favicon('/favicon.png')
             ->topNavigation(config('dashboard.panel.top_navigation'));

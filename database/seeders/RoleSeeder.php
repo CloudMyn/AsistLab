@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
     {
         $roles  =   [
             [
-                'name' => 'super admin',
+                'name' => 'developer',
                 'guard_name' => 'web'
             ],
             [
@@ -23,23 +23,15 @@ class RoleSeeder extends Seeder
                 'guard_name' => 'web'
             ],
             [
-                'name' => 'employee',
+                'name' => 'kepala_lab',
                 'guard_name' => 'web'
             ],
             [
-                'name' => 'merchant',
+                'name' => 'asisten',
                 'guard_name' => 'web'
             ],
             [
-                'name' => 'merchant',
-                'guard_name' => 'api'
-            ],
-            [
-                'name' => 'customer',
-                'guard_name' => 'web'
-            ],
-            [
-                'name' => 'customer',
+                'name' => 'praktikan',
                 'guard_name' => 'api'
             ],
         ];
