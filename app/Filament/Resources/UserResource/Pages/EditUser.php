@@ -16,4 +16,13 @@ class EditUser extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    public function mutateFormDataBeforeSave(array $data): array
+    {
+        if (!$data['password']) {
+            unset($data['password']);
+        }
+
+        return $data;
+    }
 }

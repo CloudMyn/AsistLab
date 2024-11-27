@@ -2,19 +2,15 @@
 
 namespace App\Providers\Filament;
 
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
-use App\Filament\Admin\Themes\SknorTheme;
-use App\Filament\Widgets\AccountWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
-use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
+use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -26,32 +22,26 @@ use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 
-class AdminPanelProvider extends PanelProvider
+class KepalaLabPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
-            ->brandLogo('/logo.png')
-            ->login(\App\Filament\Auth\CustomLogin::class)
-            ->passwordReset()
-            ->registration()
+            ->id('kepala_lab')
+            ->path('kepala-lab')
+            ->login()
             ->colors([
-                'primary' => Color::Orange,
+                'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/KepalaLab/Resources'), for: 'App\\Filament\\KepalaLab\\Resources')
+            ->discoverPages(in: app_path('Filament/KepalaLab/Pages'), for: 'App\\Filament\\KepalaLab\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->authMiddleware([
-                Authenticate::class,
-            ])
+            ->discoverWidgets(in: app_path('Filament/KepalaLab/Widgets'), for: 'App\\Filament\\KepalaLab\\Widgets')
             ->widgets([
-                AccountWidget::class
+                Widgets\AccountWidget::class,
+                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -63,7 +53,9 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                \Hasnayeen\Themes\Http\Middleware\SetTheme::class
+            ])
+            ->authMiddleware([
+                Authenticate::class,
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
@@ -89,31 +81,10 @@ class AdminPanelProvider extends PanelProvider
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars
                         rules: 'mimes:jpeg,png|max:' . 1024 * 3 //only accept jpeg and png files with a maximum size of 3MB
                     ),
-
-                // \Hasnayeen\Themes\ThemesPlugin::make()
-                //     ->canViewThemesPage(fn() => true)
-                //     ->registerTheme(
-                //         [
-                //             // SknorTheme::class,
-                //             // \Hasnayeen\Themes\Themes\Nord::class,
-                //             \Hasnayeen\Themes\Themes\Sunset::class,
-                //         ],
-                //         override: true,
-                //     ),
-
-                FilamentEnvEditorPlugin::make()
-                    ->navigationGroup(fn() => __('app.settings'))
-                    ->navigationLabel(fn() => __('app.env_editor'))
-                    ->navigationIcon('heroicon-o-cog-8-tooth')
-                    ->navigationSort(1)
-                    ->authorize(false)
-                    ->slug('env-editor'),
             ])
             ->spa(config('dashboard.panel.single_page_aplication'))
             ->databaseNotifications()
-            ->navigationGroups([
-                __('app.navigation.user_management'),
-            ])
+            ->navigationGroups([])
             ->favicon('/favicon.png')
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }

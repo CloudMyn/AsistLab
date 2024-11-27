@@ -16,6 +16,7 @@ class Schedule extends Model
         'start_time',
         'end_time',
         'topic',
+        'status',
         'room',
     ];
 

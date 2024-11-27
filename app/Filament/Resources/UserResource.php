@@ -38,6 +38,12 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\FileUpload::make('avatar_url')
+                    ->label('Avatar')
+                    ->image()
+                    ->columnSpanFull()
+                    ->directory('avatar'),
+
                 Forms\Components\TextInput::make('name')
                     ->label('Nama')
                     ->required()
@@ -57,17 +63,43 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('phone_number')
                     ->label('Nomor Telepon')
                     ->tel()
+                    ->prefix('+62')
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('password')
-                    ->label('Kata Sandi')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
-
-                Forms\Components\TextInput::make('status')
-                    ->label('Status')
+                Forms\Components\Select::make('role_id')
+                    ->label('Peran Pengguna')
+                    ->placeholder('Pilih Peran Pengguna')
+                    ->relationship('roles', 'name')
                     ->required(),
+
+                Forms\Components\Select::make('status')
+                    ->label('Status')
+                    ->options(['ACTIVE' => 'Aktif', 'NONACTIVE' => 'Tidak Aktif', 'BLOCKED' => 'Diblokir'])
+                    ->required(),
+
+                Forms\Components\Fieldset::make('Password')
+                    ->columnSpanFull()
+                    ->label('Kata Sandi')
+                    ->schema([
+
+                        Forms\Components\TextInput::make('password')
+                            ->label('Kata Sandi')
+                            ->password()
+                            ->required(function ($record) {
+                                return !$record;
+                            })
+                            ->confirmed()
+                            ->revealable()
+                            ->maxLength(255),
+
+
+                        Forms\Components\TextInput::make('password_confirmation')
+                            ->label('Konfirmasi Kata Sandi')
+                            ->password()
+                            ->revealable(),
+
+                    ])
+
             ]);
     }
 
@@ -99,6 +131,7 @@ class UserResource extends Resource
 
                 Tables\Columns\TextColumn::make('phone_number')
                     ->label('Nomor Telepon')
+                    ->placeholder('Tidak Tersedia')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 

@@ -32,7 +32,7 @@ class RoleSeeder extends Seeder
             ],
             [
                 'name' => 'praktikan',
-                'guard_name' => 'api'
+                'guard_name' => 'web'
             ],
         ];
 
