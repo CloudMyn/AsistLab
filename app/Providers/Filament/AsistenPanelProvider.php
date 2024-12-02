@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\AccountWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -40,8 +41,7 @@ class AsistenPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Asisten/Widgets'), for: 'App\\Filament\\Asisten\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                AccountWidget::class
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -69,6 +69,12 @@ class AsistenPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentBackgroundsPlugin::make(),
+
+                \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
+                    ->selectable()
+                    ->editable()
+                    ->timezone('Asia/Jakarta')
+                    ->locale('id'),
 
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')

@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Auth\RegistrationPage;
+use App\Filament\Widgets\AccountWidget;
 use App\Livewire\CustomProfileComponent;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -44,8 +45,7 @@ class PraktikanPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Praktikan/Widgets'), for: 'App\\Filament\\Praktikan\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                AccountWidget::class
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -73,6 +73,12 @@ class PraktikanPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentBackgroundsPlugin::make(),
+
+                \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
+                    ->selectable()
+                    ->editable()
+                    ->timezone('Asia/Jakarta')
+                    ->locale('id'),
 
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')

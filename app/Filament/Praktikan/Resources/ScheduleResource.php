@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Filament\Asisten\Resources;
+namespace App\Filament\Praktikan\Resources;
 
-use App\Filament\Asisten\Resources\ScheduleResource\Pages;
-use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers;
+use App\Filament\Praktikan\Resources\ScheduleResource\Pages;
+use App\Filament\Praktikan\Resources\ScheduleResource\RelationManagers;
 use App\Models\Schedule;
-use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Role;
 
 class ScheduleResource extends Resource
 {
@@ -37,8 +35,35 @@ class ScheduleResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', get_auth_user()->id);
+        $userId = get_auth_user()->id; // Ubah dengan ID user yang dicari
+
+        $schedules = Schedule::whereHas('attendances', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        });
+
+        return $schedules;
     }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return false;
+    }
+
 
     public static function form(Form $form): Form
     {
@@ -46,53 +71,22 @@ class ScheduleResource extends Resource
             ->schema([
 
                 Forms\Components\TextInput::make('topic')
-                    ->label('Tema/Topik')
-                    ->required()
-                    ->minLength(3)
-                    ->maxLength(255),
+                    ->label('Tema/Topik'),
 
                 Forms\Components\TextInput::make('room')
-                    ->label('Kelas/Ruangan')
-                    ->required()
-                    ->maxLength(255),
+                    ->label('Kelas/Ruangan'),
 
                 Fieldset::make('Waktu')
                     ->schema([
                         Forms\Components\DatePicker::make('date')
-                            ->label('Tanggal')
-                            ->columnSpanFull()
-                            ->minDate(today())
-                            ->unique('schedules', 'date', ignoreRecord: true)
-                            ->required(),
+                            ->label('Tanggal'),
 
                         Forms\Components\TimePicker::make('start_time')
-                            ->label('Waktu Mulai')
-                            ->minDate(today())
-                            ->required(),
+                            ->label('Waktu Mulai'),
 
                         Forms\Components\TimePicker::make('end_time')
-                            ->label('Waktu Selesai')
-                            ->minDate(today())
-                            ->required(),
+                            ->label('Waktu Selesai'),
                     ]),
-
-                Repeater::make('attendances')
-                    ->label('Daftar Praktikan')
-                    ->relationship('attendances')
-                    ->columnSpanFull()
-                    ->minItems(1)
-                    ->maxItems(10)
-                    ->simple(
-                        Forms\Components\Select::make('user_id')
-                            ->label('Praktikan')
-                            ->placeholder('Pilih Praktikan')
-                            ->options(function (Builder $query) {
-                                $role   = Role::where('name', 'praktikan')->first();
-                                return $role->users()->pluck('name', 'id');
-                            })
-                            ->distinct()
-                            ->searchable(),
-                    ),
             ]);
     }
 
@@ -137,8 +131,7 @@ class ScheduleResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

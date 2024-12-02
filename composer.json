@@ -17,6 +17,7 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "pxlrbt/filament-environment-indicator": "^2.1",
+        "saade/filament-fullcalendar": "^3.0",
         "swisnl/filament-backgrounds": "^1.1",
         "tobiasla78/filament-simple-pages": "^0.4.0"
     },

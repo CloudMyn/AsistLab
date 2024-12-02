@@ -11,12 +11,12 @@ class AccountWidget extends Widget
 
     protected int | string | array $columnSpan = 'full';
 
+    protected static ?int $sort = 1;
+
     protected function getHeading(): string
     {
         return 'Selamat Datang, ' . Auth::user()->name . '!';
     }
-
-
 
     protected function getSubheading(): string
     {
