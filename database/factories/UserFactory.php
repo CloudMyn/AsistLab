@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'phone_number'  => fake()->unique()->phoneNumber(),
             'email_verified_at' => now(),
             'phone_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }

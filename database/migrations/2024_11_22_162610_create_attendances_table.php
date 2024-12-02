@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Praktikan
             $table->boolean('present')->default(false);
             $table->timestamps();
+
+            $table->unique(['schedule_id', 'user_id']);
         });
     }
 

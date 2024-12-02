@@ -20,8 +20,38 @@ class Schedule extends Model
         'room',
     ];
 
-    public function user()
+
+    protected static function booting()
     {
-        return $this->belongsTo(User::class);
+        parent::booting();
+
+        static::creating(function ($schedule) {
+            $schedule->status = 'OPEN';
+
+            $schedule->praktikan()->associate(get_auth_user());
+        });
+
+        static::updating(function ($schedule) {
+
+            foreach ($schedule->attendances as $attendance) {
+                $praktikan = $attendance->praktikan;
+
+                send_warning_notification(
+                    title: 'Jadwal Asistensi',
+                    message: 'Terdapat Perubahan Jadwal Asistensi, Silahkan cek jadwal kembali anda!',
+                    users: $praktikan
+                );
+            }
+        });
+    }
+
+    public function praktikan()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
     }
 }
