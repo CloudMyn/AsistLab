@@ -4,6 +4,7 @@ namespace App\Filament\Asisten\Resources;
 
 use App\Filament\Asisten\Resources\ScheduleResource\Pages;
 use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers;
+use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers\AttendanceRelationManager;
 use App\Models\Schedule;
 use App\Models\User;
 use Filament\Forms;
@@ -82,6 +83,7 @@ class ScheduleResource extends Resource
                     ->columnSpanFull()
                     ->minItems(1)
                     ->maxItems(10)
+                    ->hiddenOn('edit')
                     ->simple(
                         Forms\Components\Select::make('user_id')
                             ->label('Praktikan')
@@ -150,7 +152,7 @@ class ScheduleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AttendanceRelationManager::class
         ];
     }
 

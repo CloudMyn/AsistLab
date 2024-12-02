@@ -12,7 +12,7 @@ class Assessment extends Model
 
     public $fillable = [
         'schedule_id',
-        'user_id',
+        'attendance_id',
         'score',
         'comments',
     ];
@@ -22,8 +22,7 @@ class Assessment extends Model
         return $this->belongsTo(Schedule::class);
     }
 
-    public function praktikan()
-    {
-        return $this->belongsTo(User::class, 'user_id');
+    public function attendance() {
+        return $this->belongsTo(Attendance::class);
     }
 }

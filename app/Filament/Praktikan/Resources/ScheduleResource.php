@@ -79,6 +79,7 @@ class ScheduleResource extends Resource
                 Fieldset::make('Waktu')
                     ->schema([
                         Forms\Components\DatePicker::make('date')
+                            ->columnSpanFull()
                             ->label('Tanggal'),
 
                         Forms\Components\TimePicker::make('start_time')

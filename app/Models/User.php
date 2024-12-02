@@ -92,4 +92,14 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
     {
         return $this->status === 'ACTIVE';
     }
+
+    public function schedules()
+    {
+        return $this->hasOne(Schedule::class, 'user_id', 'id');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }

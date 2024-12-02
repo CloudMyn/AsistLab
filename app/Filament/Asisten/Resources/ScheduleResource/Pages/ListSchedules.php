@@ -3,6 +3,7 @@
 namespace App\Filament\Asisten\Resources\ScheduleResource\Pages;
 
 use App\Filament\Asisten\Resources\ScheduleResource;
+use App\Filament\Asisten\Widgets\CalendarWidget;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -14,6 +15,13 @@ class ListSchedules extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            CalendarWidget::class
         ];
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('schedule_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Praktikan
+            $table->foreignId('attendance_id')->constrained('attendances')->onDelete('cascade');
             $table->integer('score');
             $table->text('comments')->nullable();
             $table->timestamps();
