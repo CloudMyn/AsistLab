@@ -2,9 +2,14 @@
 
 namespace App\Filament\Asisten\Resources\ScheduleResource\RelationManagers;
 
+use App\Infolists\Components\ChatBubbleLeft;
+use App\Infolists\Components\ChatBubbleRight;
 use App\Models\Attendance;
+use App\Models\ChatMessage;
+use App\Models\RoomChat;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -77,6 +82,132 @@ class AttendanceRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+
+                Tables\Actions\Action::make('chat')
+                    ->label('Komplain')
+                    ->icon('heroicon-o-chat-bubble-left-right')
+                    ->color('info')
+                    ->slideOver()
+                    ->modalHeading(function ($record) {
+                        return ucwords('Komplain ' . $record->praktikan->name);
+                    })
+                    ->modalSubmitAction(false)
+                    ->extraModalFooterActions([
+                        Tables\Actions\Action::make('Kirim Pesan')
+                            ->label('Kirim Pesan')
+                            ->icon('heroicon-o-paper-airplane')
+                            ->color('success')
+                            ->form([
+                                Forms\Components\RichEditor::make('message')
+                                    ->label('Pesan')
+                                    ->required()
+                                    ->minLength(3),
+                            ])
+                            ->action(function (RelationManager $livewire, $record, array $data) {
+
+                                $schedule = $livewire->getOwnerRecord();
+
+                                $asisten_id     =   get_auth_user()->id;
+                                $praktikan_id   =   $record->user_id;
+                                $schedule_id    =   $schedule->id;
+
+                                $room_chat  =   RoomChat::where('schedule_id', $schedule_id)
+                                    ->where('user_id_asisten', $asisten_id)
+                                    ->where('user_id_praktikan', $praktikan_id)
+                                    ->first();
+
+                                $message = ChatMessage::create([
+                                    'room_chat_id'   =>  $room_chat->id,
+                                    'user_id'        =>  get_auth_user()->id,
+                                    'message'        =>  $data['message']
+                                ]);
+
+                                return $message;
+                            }),
+
+                        Tables\Actions\Action::make('Hapus Chat')
+                            ->label('Tutup Chat')
+                            ->icon('heroicon-o-x-circle')
+                            ->color('danger')
+                            ->requiresConfirmation()
+                            ->action(function (RelationManager $livewire, $record) {
+
+                                $schedule = $livewire->getOwnerRecord();
+
+                                $asisten_id     =   get_auth_user()->id;
+                                $praktikan_id   =   $record->user_id;
+                                $schedule_id    =   $schedule->id;
+
+                                $room_chat  =   RoomChat::where('schedule_id', $schedule_id)
+                                    ->where('user_id_asisten', $asisten_id)
+                                    ->where('user_id_praktikan', $praktikan_id)
+                                    ->first();
+
+                                if ($room_chat) {
+                                    $room_chat->delete();
+
+                                    Notification::make()
+                                        ->title('Berhasil')
+                                        ->body('Chat berhasil dihapus')
+                                        ->success()
+                                        ->color('success')
+                                        ->send();
+                                }
+                            }),
+                    ])
+                    ->infolist(function (RelationManager $livewire, $record) {
+
+                        $schedule = $livewire->getOwnerRecord();
+
+                        $asisten_id     =   get_auth_user()->id;
+                        $praktikan_id   =   $record->user_id;
+                        $schedule_id    =   $schedule->id;
+
+                        $room_chat  =   RoomChat::where('schedule_id', $schedule_id)
+                            ->where('user_id_asisten', $asisten_id)
+                            ->where('user_id_praktikan', $praktikan_id)
+                            ->first();
+
+                        if (!$room_chat) {
+                            $room_chat  =   RoomChat::create([
+                                'room_code'         =>  \Illuminate\Support\Str::random(16),
+                                'schedule_id'       =>  $schedule_id,
+                                'user_id_asisten'   =>  $asisten_id,
+                                'user_id_praktikan' =>  $praktikan_id
+                            ]);
+                        };
+
+                        $all_messages       = $room_chat->chat_messages()->orderBy('created_at', 'asc')->get();
+
+                        $messages = [];
+
+                        foreach ($all_messages as $message) {
+
+                            if ($message->user_id == $asisten_id) {
+                                $messages[] = ChatBubbleRight::make(uniqid())
+                                    ->hiddenLabel(true)
+                                    ->state([
+                                        'text' => $message->message,
+                                        'date' => $message->created_at
+                                    ]);
+                            } else {
+                                $messages[] = ChatBubbleLeft::make(uniqid())
+                                    ->hiddenLabel(true)
+                                    ->state([
+                                        'text' => $message->message,
+                                        'date' => $message->created_at
+                                    ]);
+                            }
+                        }
+
+                        if (count($messages) == 0) {
+                            $messages[] = TextEntry::make(uniqid())
+                                ->hiddenLabel(true)
+                                ->state('Belum Ada Pesan');
+                        }
+
+                        return $messages;
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

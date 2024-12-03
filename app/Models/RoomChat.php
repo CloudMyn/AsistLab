@@ -11,11 +11,16 @@ class RoomChat extends Model
     use HasFactory;
 
     protected $fillable = [
-        'room_id',
+        'room_code',
+        'schedule_id',
         'user_id_asisten',
         'user_id_praktikan',
     ];
 
+    public function chat_messages()
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
 
     public function asisten()
     {

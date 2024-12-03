@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('room_chats', function (Blueprint $table) {
             $table->id();
             $table->string('room_code', 16)->unique(); // Nama ruang chat
+            $table->foreignId('schedule_id');
             $table->foreignId('user_id_asisten');
             $table->foreignId('user_id_praktikan');
             $table->timestamps();
 
+            $table->unique(['schedule_id', 'user_id_asisten', 'user_id_praktikan']);
+
+            $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
             $table->foreign('user_id_asisten')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id_praktikan')->references('id')->on('users')->onDelete('cascade');
         });

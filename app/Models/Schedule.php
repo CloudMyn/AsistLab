@@ -45,7 +45,7 @@ class Schedule extends Model
         });
     }
 
-    public function praktikan()
+    public function asisten()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -53,5 +53,10 @@ class Schedule extends Model
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function room_chats()
+    {
+        return $this->hasMany(RoomChat::class);
     }
 }
