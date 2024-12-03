@@ -184,14 +184,14 @@ class AttendanceRelationManager extends RelationManager
                         foreach ($all_messages as $message) {
 
                             if ($message->user_id == $asisten_id) {
-                                $messages[] = ChatBubbleRight::make(uniqid())
+                                $messages[] = ChatBubbleLeft::make(uniqid())
                                     ->hiddenLabel(true)
                                     ->state([
                                         'text' => $message->message,
                                         'date' => $message->created_at
                                     ]);
                             } else {
-                                $messages[] = ChatBubbleLeft::make(uniqid())
+                                $messages[] = ChatBubbleRight::make(uniqid())
                                     ->hiddenLabel(true)
                                     ->state([
                                         'text' => $message->message,

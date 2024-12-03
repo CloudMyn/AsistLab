@@ -13,7 +13,6 @@
             border-radius: 20px;
             padding: 10px;
             position: relative;
-            text-align: right;
         }
 
         .chat-bubble-date-right {
