@@ -122,6 +122,12 @@ class AttendanceRelationManager extends RelationManager
                                     'message'        =>  $data['message']
                                 ]);
 
+                                Notification::make()
+                                    ->title('Pesan Baru')
+                                    ->body('Anda mendapatkan pesan baru dari ' . get_auth_user()->name)
+                                    ->color('info')
+                                    ->sendToDatabase($record->praktikan);
+
                                 return $message;
                             }),
 

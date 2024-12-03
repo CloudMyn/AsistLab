@@ -153,6 +153,9 @@ class ScheduleResource extends Resource
                     ->color('info')
                     ->slideOver()
                     ->modalFooterActions([])
+                    ->mountUsing(function (Table $table) {
+                        $table->poll('2s');
+                    })
                     ->modalSubmitAction(false)
                     ->extraModalFooterActions([
                         Tables\Actions\Action::make('Kirim Pesan')
@@ -181,6 +184,12 @@ class ScheduleResource extends Resource
                                     'user_id'        =>  get_auth_user()->id,
                                     'message'        =>  $data['message']
                                 ]);
+
+                                Notification::make()
+                                    ->title('Pesan Baru')
+                                    ->body('Anda mendapatkan pesan baru dari ' . get_auth_user()->name)
+                                    ->color('info')
+                                    ->sendToDatabase($record->asisten);
 
                                 return $message;
                             }),
