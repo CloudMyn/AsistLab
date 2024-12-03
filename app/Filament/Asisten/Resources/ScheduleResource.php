@@ -118,10 +118,12 @@ class ScheduleResource extends Resource
                     ->label('Ruangan')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('status')
+                Tables\Columns\SelectColumn::make('status')
                     ->label('Status')
-                    ->badge()
-                    ->searchable(),
+                    ->options([
+                        'OPEN' => 'Terbuka',
+                        'CLOSED' => 'Tertutup',
+                    ]),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
@@ -135,6 +137,7 @@ class ScheduleResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('date', 'asc')
             ->filters([
                 //
             ])

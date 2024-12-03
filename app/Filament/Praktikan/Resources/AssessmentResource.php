@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Asisten\Resources;
+namespace App\Filament\Praktikan\Resources;
 
-use App\Filament\Asisten\Resources\AssessmentResource\Pages;
-use App\Filament\Asisten\Resources\AssessmentResource\RelationManagers;
+use App\Filament\Praktikan\Resources\AssessmentResource\Pages;
+use App\Filament\Praktikan\Resources\AssessmentResource\RelationManagers;
 use App\Models\Assessment;
 use App\Models\Attendance;
 use App\Models\Schedule;
@@ -37,7 +37,7 @@ class AssessmentResource extends Resource
     {
         $userId = get_auth_user()->id;
 
-        $query = Assessment::whereHas('schedule', function ($query) use ($userId) {
+        $query = Assessment::whereHas('attendance', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         });
 
