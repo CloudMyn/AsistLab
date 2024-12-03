@@ -90,6 +90,7 @@ class AsistenPanelProvider extends PanelProvider
             ])
             ->spa(config('dashboard.panel.single_page_aplication'))
             ->databaseNotifications()
+            ->databaseNotificationsPolling('5s')
             ->navigationGroups([])
             ->favicon('/favicon.png')
             ->topNavigation(config('dashboard.panel.top_navigation'));
