@@ -15,7 +15,7 @@ Route::get('/', function () {
     $domainKey = array_search($host, $domains);
 
     if ($domainKey !== false) {
-        return redirect()->intended("/{$domainKey}/login");
+        return redirect()->url( $domains[$domainKey] . "/{$domainKey}/login");
     } else {
         return redirect()->route('filament.praktikan.auth.login');
     }
