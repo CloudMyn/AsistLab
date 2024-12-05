@@ -17,6 +17,10 @@ Route::get('/', function () {
         }
     }
 
+    if(!auth()->check()) {
+        return redirect()->route('login');
+    }
+
     $user   =   get_auth_user();
 
     return match ($user->roles()->first()->name) {
