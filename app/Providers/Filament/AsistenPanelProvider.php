@@ -93,6 +93,7 @@ class AsistenPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('5s')
             ->navigationGroups([])
+            ->domain(env('ASISTEN_DOMAIN', null))
             ->favicon('/favicon.png')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->topNavigation(config('dashboard.panel.top_navigation'));
