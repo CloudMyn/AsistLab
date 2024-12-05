@@ -11,8 +11,9 @@ Route::get('/', function () {
         'developer' => env('DEVELOPER_DOMAIN', null),
     ];
 
+    dd($domains, request()->getHost(), array_key_exists(request()->getHost(), $domains));
+
     if (array_key_exists(request()->getHost(), $domains)) {
-        dd($domains[request()->getHost()], request()->getHost());
         return redirect()->intended("/{$domains[request()->getHost()]}/login");
     } else {
         return redirect()->route('filament.praktikan.auth.login');
