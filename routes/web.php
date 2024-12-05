@@ -14,6 +14,8 @@ Route::get('/', function () {
     $host = request()->getHost();
     $domainKey = array_search($host, $domains);
 
+    dd($domainKey, $host);
+
     if ($domainKey !== false) {
         return redirect()->intended("/{$domainKey}/login");
     } else {
