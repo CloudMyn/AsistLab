@@ -35,8 +35,9 @@ class PraktikanPanelProvider extends PanelProvider
             ->login()
             ->registration(RegistrationPage::class)
             ->passwordReset()
+            ->darkMode(false)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Sky,
             ])
             ->discoverResources(in: app_path('Filament/Praktikan/Resources'), for: 'App\\Filament\\Praktikan\\Resources')
             ->discoverPages(in: app_path('Filament/Praktikan/Pages'), for: 'App\\Filament\\Praktikan\\Pages')
@@ -97,6 +98,7 @@ class PraktikanPanelProvider extends PanelProvider
             ->databaseNotificationsPolling('5s')
             ->navigationGroups([])
             ->favicon('/favicon.png')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
 }

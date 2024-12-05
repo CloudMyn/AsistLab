@@ -7,6 +7,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/css/filament/admin/themes/sknor-theme.css',
+                'resources/css/filament/admin/theme.css',
                 'resources/js/app.js'
             ],
             refresh: true,

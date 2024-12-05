@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Asisten\Widgets;
+namespace App\Filament\KepalaLab\Widgets;
 
-use App\Filament\Asisten\Resources\ScheduleResource;
+use App\Filament\KepalaLab\Resources\ScheduleResource;
 use App\Models\Schedule;
 use Filament\Widgets\Widget;
 use Illuminate\Database\Eloquent\Model;
@@ -11,8 +11,7 @@ class CalendarWidget extends \Saade\FilamentFullCalendar\Widgets\FullCalendarWid
 {
     public Model | string | null $model = Schedule::class;
 
-
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
 
     protected function headerActions(): array
     {
@@ -38,17 +37,17 @@ class CalendarWidget extends \Saade\FilamentFullCalendar\Widgets\FullCalendarWid
     public function fetchEvents(array $fetchInfo): array
     {
         return Schedule::query()
-            ->where('user_id', get_auth_user()->id)
             ->get()
             ->map(
                 fn(Schedule $schedule) => [
                     'title' => 'Jadwal Asistensi #' . $schedule->id,
                     'start' => $schedule->date,
                     'end' => $schedule->date,
-                    'url' => ScheduleResource::getUrl(name: 'edit', parameters: ['record' => $schedule]),
+                    'url' => ScheduleResource::getUrl(name: 'view', parameters: ['record' => $schedule]),
                     'shouldOpenUrlInNewTab' => true
                 ]
             )
             ->all();
     }
 }
+

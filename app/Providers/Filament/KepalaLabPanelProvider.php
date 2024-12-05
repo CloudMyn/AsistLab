@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\AccountWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -31,7 +32,7 @@ class KepalaLabPanelProvider extends PanelProvider
             ->path('kepala-lab')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Sky,
             ])
             ->discoverResources(in: app_path('Filament/KepalaLab/Resources'), for: 'App\\Filament\\KepalaLab\\Resources')
             ->discoverPages(in: app_path('Filament/KepalaLab/Pages'), for: 'App\\Filament\\KepalaLab\\Pages')
@@ -40,8 +41,9 @@ class KepalaLabPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/KepalaLab/Widgets'), for: 'App\\Filament\\KepalaLab\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
+                AccountWidget::class
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -70,6 +72,12 @@ class KepalaLabPanelProvider extends PanelProvider
             ->plugins([
                 FilamentBackgroundsPlugin::make(),
 
+                \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
+                    ->selectable()
+                    ->editable()
+                    ->timezone('Asia/Jakarta')
+                    ->locale('id'),
+
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
                     ->shouldRegisterNavigation(false)
@@ -82,10 +90,12 @@ class KepalaLabPanelProvider extends PanelProvider
                         rules: 'mimes:jpeg,png|max:' . 1024 * 3 //only accept jpeg and png files with a maximum size of 3MB
                     ),
             ])
+            ->darkMode(false)
             ->spa(config('dashboard.panel.single_page_aplication'))
             ->databaseNotifications()
             ->navigationGroups([])
             ->favicon('/favicon.png')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
 }

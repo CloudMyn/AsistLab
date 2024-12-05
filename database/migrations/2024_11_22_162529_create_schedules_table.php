@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Asisten
             $table->enum('status', ['OPEN', 'CLOSED'])->default('OPEN');
             $table->timestamps();
+
+            $table->unique(['date', 'start_time', 'end_time', 'room']);
         });
     }
 

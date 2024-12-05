@@ -11,6 +11,8 @@ class CreateSchedule extends CreateRecord
 {
     protected static string $resource = ScheduleResource::class;
 
+    protected static bool $canCreateAnother = false;
+
     protected function fillForm(): void
     {
         $this->callHook('beforeFill');

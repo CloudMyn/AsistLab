@@ -20,6 +20,7 @@ class Schedule extends Model
         'room',
     ];
 
+    // protected $table = 'jadwal_asistensi';
 
     protected static function booting()
     {
@@ -28,7 +29,7 @@ class Schedule extends Model
         static::creating(function ($schedule) {
             $schedule->status = 'OPEN';
 
-            $schedule->praktikan()->associate(get_auth_user());
+            $schedule->asisten()->associate(get_auth_user());
         });
 
         static::updating(function ($schedule) {

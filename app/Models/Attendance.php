@@ -46,4 +46,8 @@ class Attendance extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function assessments() {
+        return $this->hasMany(Assessment::class);
+    }
 }

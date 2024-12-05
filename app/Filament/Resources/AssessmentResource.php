@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Asisten\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Asisten\Resources\AssessmentResource\Pages;
-use App\Filament\Asisten\Resources\AssessmentResource\RelationManagers;
+use App\Filament\Resources\AssessmentResource\Pages;
+use App\Filament\Resources\AssessmentResource\RelationManagers;
 use App\Models\Assessment;
 use App\Models\Attendance;
 use App\Models\Schedule;
@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AssessmentResource extends Resource
@@ -33,15 +34,14 @@ class AssessmentResource extends Resource
         return null;
     }
 
-    public static function getEloquentQuery(): Builder
+    public static function canCreate(): bool
     {
-        $userId = get_auth_user()->id;
+        return false;
+    }
 
-        $query = Assessment::whereHas('schedule', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        });
-
-        return $query;
+    public static function canEdit(Model $record): bool
+    {
+        return false;
     }
 
     public static function form(Form $form): Form

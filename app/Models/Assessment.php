@@ -22,7 +22,8 @@ class Assessment extends Model
         return $this->belongsTo(Schedule::class);
     }
 
-    public function attendance() {
+    public function attendance()
+    {
         return $this->belongsTo(Attendance::class);
     }
 }

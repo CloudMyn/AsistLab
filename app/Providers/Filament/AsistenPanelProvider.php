@@ -31,8 +31,9 @@ class AsistenPanelProvider extends PanelProvider
             ->id('asisten')
             ->path('asisten')
             ->login()
+            ->darkMode(false)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Sky,
             ])
             ->discoverResources(in: app_path('Filament/Asisten/Resources'), for: 'App\\Filament\\Asisten\\Resources')
             ->discoverPages(in: app_path('Filament/Asisten/Pages'), for: 'App\\Filament\\Asisten\\Pages')
@@ -93,6 +94,7 @@ class AsistenPanelProvider extends PanelProvider
             ->databaseNotificationsPolling('5s')
             ->navigationGroups([])
             ->favicon('/favicon.png')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
 }

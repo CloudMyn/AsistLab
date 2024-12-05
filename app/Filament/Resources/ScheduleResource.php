@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Asisten\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Asisten\Resources\ScheduleResource\Pages;
-use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers;
-use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers\AttendanceRelationManager;
+use App\Filament\Resources\ScheduleResource\Pages;
+use App\Filament\Resources\ScheduleResource\RelationManagers;
 use App\Models\Schedule;
 use App\Models\User;
 use Filament\Forms;
@@ -15,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Spatie\Permission\Models\Role;
 
@@ -36,15 +36,21 @@ class ScheduleResource extends Resource
         return null;
     }
 
-    public static function getEloquentQuery(): Builder
+    public static function canCreate(): bool
     {
-        return parent::getEloquentQuery()->where('user_id', get_auth_user()->id);
+        return false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+
 
                 Forms\Components\TextInput::make('topic')
                     ->label('Tema/Topik')
@@ -82,7 +88,6 @@ class ScheduleResource extends Resource
                     ->columnSpanFull()
                     ->minItems(1)
                     ->maxItems(10)
-                    ->hiddenOn('edit')
                     ->simple(
                         Forms\Components\Select::make('user_id')
                             ->label('Praktikan')
@@ -95,6 +100,7 @@ class ScheduleResource extends Resource
                             ->distinct()
                             ->searchable(),
                     ),
+
             ]);
     }
 
@@ -118,12 +124,11 @@ class ScheduleResource extends Resource
                     ->label('Ruangan')
                     ->searchable(),
 
-                Tables\Columns\SelectColumn::make('status')
+                Tables\Columns\TextColumn::make('status')
                     ->label('Status')
-                    ->options([
-                        'OPEN' => 'Terbuka',
-                        'CLOSED' => 'Tertutup',
-                    ]),
+                    ->searchable()
+                    ->sortable()
+                    ->badge(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
@@ -142,6 +147,7 @@ class ScheduleResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -154,15 +160,14 @@ class ScheduleResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            AttendanceRelationManager::class
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListSchedules::route('/'),
+            'view' => Pages\ViewSchedule::route('/{record}/view'),
             'create' => Pages\CreateSchedule::route('/create'),
             'edit' => Pages\EditSchedule::route('/{record}/edit'),
         ];

@@ -34,12 +34,12 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandLogo('/logo.png')
             ->login(\App\Filament\Auth\CustomLogin::class)
             ->passwordReset()
             ->registration()
+            ->darkMode(false)
             ->colors([
-                'primary' => Color::Orange,
+                'primary' => Color::Sky,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -78,6 +78,12 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentBackgroundsPlugin::make(),
 
+                \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
+                    ->selectable()
+                    ->editable()
+                    ->timezone('Asia/Jakarta')
+                    ->locale('id'),
+
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
                     ->shouldRegisterNavigation(false)
@@ -114,6 +120,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 __('app.navigation.user_management'),
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->favicon('/favicon.png')
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
