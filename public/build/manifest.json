@@ -1,0 +1,23 @@
+{
+  "resources/css/app.css": {
+    "file": "app.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/filament/admin/theme.css": {
+    "file": "theme.css",
+    "src": "resources/css/filament/admin/theme.css",
+    "isEntry": true
+  },
+  "resources/css/filament/admin/themes/sknor-theme.css": {
+    "file": "sknor-theme.css",
+    "src": "resources/css/filament/admin/themes/sknor-theme.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "app2",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
