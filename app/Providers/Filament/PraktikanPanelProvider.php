@@ -99,6 +99,7 @@ class PraktikanPanelProvider extends PanelProvider
             ->navigationGroups([])
             ->favicon('/favicon.png')
             ->viteTheme('resources/css/filament/admin/theme.css')
+            ->domain(env('PRAKTIKAN_DOMAIN', null))
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
 }

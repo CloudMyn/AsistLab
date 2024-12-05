@@ -122,6 +122,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->favicon('/favicon.png')
+            ->domain(env('ADMIN_DOMAIN', null))
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
 }

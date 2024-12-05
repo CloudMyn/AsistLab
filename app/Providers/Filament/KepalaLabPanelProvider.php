@@ -96,6 +96,7 @@ class KepalaLabPanelProvider extends PanelProvider
             ->navigationGroups([])
             ->favicon('/favicon.png')
             ->viteTheme('resources/css/filament/admin/theme.css')
+            ->domain(env('KEPALA_LAB_DOMAIN', null))
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
 }
