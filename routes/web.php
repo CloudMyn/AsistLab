@@ -12,23 +12,8 @@ Route::get('/', function () {
     ];
 
     if (array_key_exists(request()->getHost(), $domains)) {
-        if (auth()->guest()) {
-            return redirect()->intended("/{$domains[request()->getHost()]}/login");
-        }
+        return redirect()->intended("/{$domains[request()->getHost()]}/login");
+    } else {
+        return redirect()->route('filament.praktikan.auth.login');
     }
-
-    if(!auth()->check()) {
-        return redirect()->route('login');
-    }
-
-    $user   =   get_auth_user();
-
-    return match ($user->roles()->first()->name) {
-        'developer' => redirect()->route('filament.developer.pages.dashboard'),
-        'admin' => redirect()->route('filament.admin.pages.dashboard'),
-        'praktikan' => redirect()->route('filament.praktikan.pages.dashboard'),
-        'asisten' => redirect()->route('filament.asisten.pages.dashboard'),
-        'kepala_lab' => redirect()->route('filament.kepala_lab.pages.dashboard'),
-        default => redirect()->route('filament.admin.pages.dashboard'),
-    };
 });
