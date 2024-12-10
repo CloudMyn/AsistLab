@@ -75,7 +75,12 @@ class DeveloperPanelProvider extends PanelProvider
                     }),
             ])
             ->plugins([
-                FilamentBackgroundsPlugin::make(),
+                FilamentBackgroundsPlugin::make()
+                    ->imageProvider(
+                        \Swis\Filament\Backgrounds\ImageProviders\MyImages::make()
+                            ->directory('images/backgrounds')
+                    )
+                    ->showAttribution(false),
 
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
