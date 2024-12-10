@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'dev',
             'username' => 'dev',
             'email' => 'dev@mail.io',
-            'peran' => 'ADMIN',
+            'peran' => 'DEVELOPER',
         ]);
 
         $kepala_lab = User::factory()->create([

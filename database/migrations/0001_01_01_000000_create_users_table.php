@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('username')->unique(); // Username unik
             $table->string('email')->unique(); // Email unik
             $table->string('password'); // Password
-            $table->enum('peran', ['ASISTEN', 'ADMIN', 'PRAKTIKAN', 'KEPALA_LAB_DAN_DOSEN'])->default('PRAKTIKAN'); // Role pengguna
+            $table->enum('peran', ['ASISTEN', 'ADMIN', 'PRAKTIKAN', 'KEPALA_LAB_DAN_DOSEN', 'DEVELOPER'])->default('PRAKTIKAN'); // Role pengguna
             $table->enum('status', ['ACTIVE', 'NONACTIVE', 'BLOCKED'])->default('ACTIVE'); // Status pengguna
             $table->rememberToken();
             $table->timestamps();

@@ -62,6 +62,10 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        if($this->peran == 'DEVELOPER') {
+            return true;
+        }
+
         return strtolower($panel->getId()) == strtolower($this->peran);
     }
 
