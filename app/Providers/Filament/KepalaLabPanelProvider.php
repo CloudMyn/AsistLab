@@ -31,6 +31,9 @@ class KepalaLabPanelProvider extends PanelProvider
             ->id('kepala_lab')
             ->path('kepala-lab-dan-dosen')
             ->login()
+            ->brandLogo('/fikom.jpg')
+            ->brandName('Fakultas Ilmu Komputer')
+            ->brandLogoHeight('30px')
             ->colors([
                 'primary' => Color::Sky,
             ])

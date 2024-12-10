@@ -32,7 +32,9 @@ class DeveloperPanelProvider extends PanelProvider
         return $panel
             ->id('developer')
             ->path('developer')
-            ->brandLogo('/logo.png')
+            ->brandLogo('/fikom.jpg')
+            ->brandName('Fakultas Ilmu Komputer')
+            ->brandLogoHeight('30px')
             ->login(\App\Filament\Auth\CustomLogin::class)
             ->passwordReset()
             ->colors([

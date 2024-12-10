@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         FilamentAsset::register([
-            // Css::make('sknor-theme', asset('build/sknor-theme.css')), // sknor theme
+            Css::make('custom-style', asset('css/style.css')), // sknor theme
         ]);
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
@@ -37,6 +37,11 @@ class AppServiceProvider extends ServiceProvider
         FilamentView::registerRenderHook(
             PanelsRenderHook::SIDEBAR_NAV_START,
             fn (): string => Blade::render('<livewire:account-navbar />'),
+        );
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::TOPBAR_START,
+            fn (): string => "<h1 style='font-size: 23px; font-weight: bold'>" . config('app.name') . "</h1>",
         );
     }
 }

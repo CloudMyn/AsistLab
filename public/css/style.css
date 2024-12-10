@@ -1,0 +1,43 @@
+#login-container {
+    position: relative;
+    display: flex;
+    height: 49vh !important;
+    width: 750px !important;
+    background-color: #fff;
+    padding: 0px 40px;
+    border-radius: 4px;
+    box-shadow: #00000063 0px 0px 10px;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+.fi-simple-layout:after {
+    content: "" !important;
+}
+
+#login-form {
+    flex: 5;
+    position: relative;
+    border-radius: 0px !important;
+    z-index: 2;
+}
+
+#logo-login {
+    display: none;
+    flex: 3;
+    margin-left: 15px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+#logo-login img {
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    #logo-login {
+        display: block;
+    }
+}

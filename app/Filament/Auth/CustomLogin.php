@@ -9,6 +9,13 @@ use Illuminate\Validation\ValidationException;
 
 class CustomLogin extends Login
 {
+
+    /**
+     * @var view-string
+     */
+    protected static string $view = 'filament-panels::pages.auth.login';
+
+
     /**
      * Create a new class instance.
      */
@@ -16,8 +23,6 @@ class CustomLogin extends Login
     {
         //
     }
-
-
 
     /**
      * @return array<int | string, string | Form>

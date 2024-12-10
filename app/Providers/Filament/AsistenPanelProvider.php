@@ -32,6 +32,9 @@ class AsistenPanelProvider extends PanelProvider
             ->path('asisten')
             ->login()
             ->darkMode(false)
+            ->brandLogo('/fikom.jpg')
+            ->brandName('Fakultas Ilmu Komputer')
+            ->brandLogoHeight('30px')
             ->colors([
                 'primary' => Color::Sky,
             ])
