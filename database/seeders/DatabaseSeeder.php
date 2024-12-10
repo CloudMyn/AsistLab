@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Praktikan;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,31 +14,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            RoleSeeder::class,
-        ]);;
+        $this->call([]);;
 
         $admin = User::factory()->create([
             'name' => 'admin',
             'username' => 'admin',
             'email' => 'admin@mail.io',
+            'peran' => 'ADMIN',
         ]);
 
         $dev = User::factory()->create([
             'name' => 'dev',
             'username' => 'dev',
             'email' => 'dev@mail.io',
+            'peran' => 'ADMIN',
         ]);
 
         $kepala_lab = User::factory()->create([
             'name' => 'kepala_lab',
             'username' => 'kepala_lab',
             'email' => 'kepala_lab@mail.io',
+            'peran' => 'KEPALA_LAB_DAN_DOSEN',
         ]);
-
-        $admin->assignRole('admin');
-        $dev->assignRole('developer');
-        $kepala_lab->assignRole('kepala_lab');
 
         for ($i = 0; $i < 5; $i++) {
 
@@ -45,9 +43,8 @@ class DatabaseSeeder extends Seeder
                 'name' => 'asisten 0' . ($i + 1),
                 'username' => 'asisten_0' . ($i + 1),
                 'email' => 'asisten_0' . ($i + 1) . '@mail.io',
+                'peran' => 'ASISTEN',
             ]);
-
-            $asisten->assignRole('asisten');
         }
 
         for ($i = 0; $i < 5; $i++) {
@@ -56,9 +53,14 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Praktikan 0' . ($i + 1),
                 'username' => 'praktikan_0' . ($i + 1),
                 'email' => 'praktikan_0' . ($i + 1) . '@mail.io',
+                'peran' => 'PRAKTIKAN'
             ]);
 
-            $praktikan->assignRole('praktikan');
+            Praktikan::create([
+                'user_id' => $praktikan->id,
+                'kelas' =>  fake()->word(),
+                'jurusan' => fake()->word(),
+            ]);
         }
     }
 }

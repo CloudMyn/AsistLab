@@ -16,7 +16,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Role;
 
 class ScheduleResource extends Resource
 {
@@ -93,8 +92,7 @@ class ScheduleResource extends Resource
                             ->label('Praktikan')
                             ->placeholder('Pilih Praktikan')
                             ->options(function (Builder $query) {
-                                $role   = Role::where('name', 'praktikan')->first();
-                                return $role->users()->pluck('name', 'id');
+                                return User::where('peran', 'PRAKTIKAN')->get()->pluck('name', 'id');
                             })
                             ->required()
                             ->distinct()

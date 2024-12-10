@@ -16,7 +16,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Role;
 
 class ScheduleResource extends Resource
 {
@@ -57,6 +56,17 @@ class ScheduleResource extends Resource
                     ->required()
                     ->maxLength(255),
 
+
+                Forms\Components\Select::make('status')
+                    ->label('Status Asistensi')
+                    ->columnSpanFull()
+                    ->required()
+                    ->options([
+                        'SCHEDULED' => 'Terjadwal',
+                        'CANCELLED' => 'Dibatalkan',
+                        'COMPLETED' => 'Selesai',
+                    ]),
+
                 Fieldset::make('Waktu')
                     ->schema([
                         Forms\Components\DatePicker::make('date')
@@ -68,14 +78,12 @@ class ScheduleResource extends Resource
                         Forms\Components\TimePicker::make('start_time')
                             ->label('Waktu Mulai')
                             ->minDate(today())
-                            ->format('HH:mm')
                             ->step(60)
                             ->required(),
 
                         Forms\Components\TimePicker::make('end_time')
                             ->label('Waktu Selesai')
                             ->minDate(today())
-                            ->format('HH:mm')
                             ->step(60)
                             ->required(),
                     ]),
@@ -92,8 +100,7 @@ class ScheduleResource extends Resource
                             ->label('Praktikan')
                             ->placeholder('Pilih Praktikan')
                             ->options(function (Builder $query) {
-                                $role   = Role::where('name', 'praktikan')->first();
-                                return $role->users()->pluck('name', 'id');
+                                return User::where('peran', 'PRAKTIKAN')->get()->pluck('name', 'id');
                             })
                             ->required()
                             ->distinct()
@@ -125,8 +132,9 @@ class ScheduleResource extends Resource
                 Tables\Columns\SelectColumn::make('status')
                     ->label('Status')
                     ->options([
-                        'OPEN' => 'Terbuka',
-                        'CLOSED' => 'Tertutup',
+                        'SCHEDULED' => 'Terjadwal',
+                        'CANCELLED' => 'Dibatalkan',
+                        'COMPLETED' => 'Selesai',
                     ]),
 
                 Tables\Columns\TextColumn::make('created_at')

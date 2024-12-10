@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use App\Filament\Admin\Themes\SknorTheme;
 use App\Filament\Widgets\AccountWidget;
 use Filament\Http\Middleware\Authenticate;

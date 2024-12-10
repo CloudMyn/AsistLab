@@ -15,7 +15,6 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -38,9 +37,7 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->whereHas('roles', function ($query) {
-            $query->where('name', '!=', 'developer');
-        });
+        return parent::getEloquentQuery()->where('peran', '!=', 'DEVELOPER');
     }
 
     public static function form(Form $form): Form
@@ -60,6 +57,7 @@ class UserResource extends Resource
 
                 Forms\Components\TextInput::make('username')
                     ->label('Username')
+                    ->unique('users', 'username', ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
 
@@ -69,42 +67,30 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('phone_number')
-                    ->label('Nomor Telepon')
-                    ->tel()
-                    ->prefix('+62')
-                    ->maxLength(255),
-
-                Forms\Components\Select::make('role_id')
+                Forms\Components\Select::make('peran')
                     ->label('Peran Pengguna')
                     ->placeholder('Pilih Peran Pengguna')
-                    ->options(function () {
-
-                        $roles = Role::where('name', '!=', 'developer')->get();
-
-                        $data = [];
-
-                        foreach ($roles as $role) {
-
-                            if ($role->name == 'kepala_lab') {
-                                $data[$role->id] =  'Kepala Lab & Dosen';
-                            } else {
-                                $data[$role->id] = ucwords($role->name);
-                            }
-                        }
-
-                        return $data;
-                    })
+                    ->live()
+                    ->options([
+                        'ADMIN' => 'Admin',
+                        'ASISTEN' => 'Asisten',
+                        'PRAKTIKAN' => 'Praktikan',
+                        'KEPALA_LAB_DAN_DOSEN' => 'Kepala Lab & Dosen',
+                    ])
                     ->required(),
 
                 Forms\Components\Select::make('status')
                     ->label('Status')
+                    ->columnSpanFull()
                     ->options(['ACTIVE' => 'Aktif', 'NONACTIVE' => 'Tidak Aktif', 'BLOCKED' => 'Diblokir'])
                     ->required(),
 
                 Forms\Components\Fieldset::make('Password')
                     ->columnSpanFull()
                     ->label('Kata Sandi')
+                    ->visible(function ($get) {
+                        return $get('peran') == 'PRAKTIKAN';
+                    })
                     ->schema([
 
                         Forms\Components\TextInput::make('password')
@@ -123,7 +109,26 @@ class UserResource extends Resource
                             ->password()
                             ->revealable(),
 
-                    ])
+                    ]),
+
+
+                Forms\Components\Fieldset::make('praktikan')
+                    ->columnSpanFull()
+                    ->label('Data Praktikan')
+                    ->relationship('praktikan')
+                    ->schema([
+
+                        Forms\Components\TextInput::make('kelas')
+                            ->label('Kelas')
+                            ->required()
+                            ->maxLength(255),
+
+                        Forms\Components\TextInput::make('jurusan')
+                            ->label('Jurusan')
+                            ->required()
+                            ->maxLength(255),
+
+                    ]),
 
             ]);
     }
@@ -154,27 +159,14 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('phone_number')
-                    ->label('Nomor Telepon')
-                    ->placeholder('Tidak Tersedia')
-                    ->toggleable(isToggledHiddenByDefault: false)
+                Tables\Columns\TextColumn::make('peran')
+                    ->label('Peran')
+                    ->badge()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
                     ->badge(),
-
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->label('Verifikasi Email')
-                    ->dateTime()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('phone_verified_at')
-                    ->label('Verifikasi Nomor Telepon')
-                    ->dateTime()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Buat')

@@ -28,7 +28,7 @@ class KepalaLabPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('kepala_lab')
+            ->id('kepala_lab_dan_dosen')
             ->path('kepala-lab-dan-dosen')
             ->login()
             ->brandLogo('/fikom.jpg')

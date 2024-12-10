@@ -87,8 +87,6 @@ class RegistrationPage extends SimplePage
 
             $this->callHook('afterRegister');
 
-            $user->assignRole('praktikan');
-
             return $user;
         });
 
@@ -122,6 +120,8 @@ class RegistrationPage extends SimplePage
      */
     protected function handleRegistration(array $data): Model
     {
+        $data['peran']  =   'PRAKTIKAN';
+
         return $this->getUserModel()::create($data);
     }
 

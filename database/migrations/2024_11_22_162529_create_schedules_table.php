@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('topic');
             $table->string('room');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Asisten
-            $table->enum('status', ['OPEN', 'CLOSED'])->default('OPEN');
+            $table->enum('status', ['SCHEDULED', 'CANCELLED', 'COMPLETED'])->default('SCHEDULED');
             $table->timestamps();
 
             $table->unique(['date', 'start_time', 'end_time', 'room']);

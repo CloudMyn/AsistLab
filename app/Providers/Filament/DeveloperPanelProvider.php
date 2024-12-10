@@ -17,7 +17,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use Filament\Navigation\MenuItem;
 use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
@@ -103,8 +102,6 @@ class DeveloperPanelProvider extends PanelProvider
                         override: true,
                     ),
 
-                FilamentSpatieRolesPermissionsPlugin::make(),
-
                 EnvironmentIndicatorPlugin::make()
                     ->showBadge(true)
                     ->showBorder(false)
@@ -119,12 +116,6 @@ class DeveloperPanelProvider extends PanelProvider
             ])
             ->spa(config('dashboard.panel.single_page_aplication'))
             ->databaseNotifications()
-
-            ->navigationGroups([
-                __('app.navigation.user_management'),
-                __('filament-spatie-roles-permissions::filament-spatie.section.roles_and_permissions'),
-                __('app.settings'),
-            ])
             ->favicon('/favicon.png')
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }

@@ -7,6 +7,7 @@ use App\Infolists\Components\ChatBubbleRight;
 use App\Models\Attendance;
 use App\Models\ChatMessage;
 use App\Models\RoomChat;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
@@ -16,7 +17,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Role;
 
 class AttendanceRelationManager extends RelationManager
 {
@@ -40,11 +40,9 @@ class AttendanceRelationManager extends RelationManager
                     ->placeholder('Pilih Praktikan')
                     ->columnSpanFull()
                     ->options(function (RelationManager $livewire) {
-                        $role   = Role::where('name', 'praktikan')->first();
-
                         $scheduleId = $livewire->getOwnerRecord()->id;
 
-                        return $role->users()->whereDoesntHave('attendances', function ($query) use ($scheduleId) {
+                        return User::where('peran', 'PRAKTIKAN')->whereDoesntHave('attendances', function ($query) use ($scheduleId) {
                             $query->where('schedule_id', $scheduleId);
                         })->get()->pluck('name', 'id')->toArray();
                     })
@@ -84,12 +82,12 @@ class AttendanceRelationManager extends RelationManager
                 Tables\Actions\DeleteAction::make(),
 
                 Tables\Actions\Action::make('chat')
-                    ->label('Komplain')
+                    ->label('Chat')
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->color('info')
                     ->slideOver()
                     ->modalHeading(function ($record) {
-                        return ucwords('Komplain ' . $record->praktikan->name);
+                        return ucwords('Chat ' . $record->praktikan->name);
                     })
                     ->modalSubmitAction(false)
                     ->extraModalFooterActions([

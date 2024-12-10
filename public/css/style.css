@@ -1,10 +1,10 @@
 #login-container {
     position: relative;
     display: flex;
-    height: 49vh !important;
+    height: auto !important;
     width: 750px !important;
     background-color: #fff;
-    padding: 0px 40px;
+    padding: 40px 40px;
     border-radius: 4px;
     box-shadow: #00000063 0px 0px 10px;
     overflow: hidden;

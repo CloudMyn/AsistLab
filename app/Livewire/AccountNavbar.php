@@ -34,7 +34,7 @@ class AccountNavbar extends Component implements HasForms, HasActions
             <div style="display: flex; align-items: center; justify-content: center; width: 100%; flex-direction: column">
                 <img class="fi-avatar object-cover object-center fi-circular rounded-full h-8 w-8 fi-user-avatar" src="{{ get_auth_user()->getFilamentAvatarUrl() }}" alt="Avatar admin" style="width: 120px; height: 120px;">
                 <h2 class="fi-user-name mt-2">{{ ucwords(get_auth_user()->name) }}</h2>
-                <h4 class="mt-1" style="font-weight: 400; font-size: 14px; color: #6b7280">{{ ucwords(get_auth_user()->roles()->first()->name) }}</h4>
+                <h4 class="mt-1" style="font-weight: 400; font-size: 14px; color: #6b7280">{{ ucwords(get_auth_user()->peran) }}</h4>
             </div>
 
             {{ $this->logout }}

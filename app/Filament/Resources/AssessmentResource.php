@@ -111,12 +111,16 @@ class AssessmentResource extends Resource
                     ->label('Praktikan')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('schedule.topic')
-                    ->label('Modul')
+                Tables\Columns\TextColumn::make('attendance.praktikan.praktikan.kelas')
+                    ->label('Kelas Praktikan')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('schedule.room')
-                    ->label('Kelas/Ruangan')
+                Tables\Columns\TextColumn::make('attendance.praktikan.praktikan.jurusan')
+                    ->label('Jurusan Praktikan')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('schedule.topic')
+                    ->label('Modul Asistensi')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('score')

@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AssessmentResource extends Resource
@@ -33,6 +34,27 @@ class AssessmentResource extends Resource
         return null;
     }
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return false;
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $userId = get_auth_user()->id;
@@ -48,6 +70,7 @@ class AssessmentResource extends Resource
     {
         return $form
             ->schema([
+
                 Forms\Components\Select::make('schedule_id')
                     ->label('Jadwal')
                     ->required()
@@ -55,7 +78,15 @@ class AssessmentResource extends Resource
                     ->reactive()
                     ->placeholder('Pilih Jadwal')
                     ->options(function ($livewire) {
-                        return Schedule::where('user_id', get_auth_user()->id)->pluck('date', 'id');
+                        $schedules = Schedule::where('user_id', get_auth_user()->id)->get();
+
+                        $array = [];
+
+                        foreach ($schedules as $schedule) {
+                            $array[$schedule->id] = $schedule->date . " - " . $schedule->room . " ( " . $schedule->topic . " ) ";
+                        }
+
+                        return $array;
                     }),
 
                 Forms\Components\Select::make('attendance_id')
@@ -132,7 +163,7 @@ class AssessmentResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

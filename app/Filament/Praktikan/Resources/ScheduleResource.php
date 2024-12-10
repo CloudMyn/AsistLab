@@ -145,9 +145,9 @@ class ScheduleResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\Action::make('chat')
-                    ->label('Komplain')
+                    ->label('Chat')
                     ->modalHeading(function ($record) {
-                        return ucwords('Komplain ' . $record->asisten->name);
+                        return ucwords('Chat ' . $record->asisten->name);
                     })
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->color('info')
