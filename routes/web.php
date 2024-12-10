@@ -6,7 +6,7 @@ Route::get('/', function () {
     $domains = [
         'asisten' => env('ASISTEN_DOMAIN', null),
         'admin' => env('ADMIN_DOMAIN', null),
-        'kepala-lab' => env('KEPALA_LAB_DOMAIN', null),
+        'kepala-lab-dan-dosen' => env('KEPALA_LAB_DOMAIN', null),
         'praktikan' => env('PRAKTIKAN_DOMAIN', null),
         'developer' => env('DEVELOPER_DOMAIN', null),
     ];

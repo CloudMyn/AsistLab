@@ -29,7 +29,7 @@ class KepalaLabPanelProvider extends PanelProvider
     {
         return $panel
             ->id('kepala_lab')
-            ->path('kepala-lab')
+            ->path('kepala-lab-dan-dosen')
             ->login()
             ->colors([
                 'primary' => Color::Sky,
