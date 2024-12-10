@@ -39,7 +39,6 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Fakultas Ilmu Komputer')
             ->brandLogoHeight('30px')
             ->passwordReset()
-            ->registration()
             ->darkMode(false)
             ->colors([
                 'primary' => Color::Sky,
