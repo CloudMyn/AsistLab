@@ -88,9 +88,6 @@ class UserResource extends Resource
                 Forms\Components\Fieldset::make('Password')
                     ->columnSpanFull()
                     ->label('Kata Sandi')
-                    ->visible(function ($get) {
-                        return $get('peran') == 'PRAKTIKAN';
-                    })
                     ->schema([
 
                         Forms\Components\TextInput::make('password')
@@ -116,6 +113,9 @@ class UserResource extends Resource
                     ->columnSpanFull()
                     ->label('Data Praktikan')
                     ->relationship('praktikan')
+                    ->visible(function ($get) {
+                        return $get('peran') == 'PRAKTIKAN';
+                    })
                     ->schema([
 
                         Forms\Components\TextInput::make('kelas')
