@@ -53,7 +53,7 @@ class ScheduleResource extends Resource
 
 
                 Forms\Components\TextInput::make('topic')
-                    ->label('Tema/Topik')
+                    ->label('Modul')
                     ->required()
                     ->minLength(3)
                     ->maxLength(255),

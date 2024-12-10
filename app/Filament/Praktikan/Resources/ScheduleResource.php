@@ -82,7 +82,7 @@ class ScheduleResource extends Resource
             ->schema([
 
                 Forms\Components\TextInput::make('topic')
-                    ->label('Tema/Topik'),
+                    ->label('Modul'),
 
                 Forms\Components\TextInput::make('room')
                     ->label('Kelas/Ruangan'),

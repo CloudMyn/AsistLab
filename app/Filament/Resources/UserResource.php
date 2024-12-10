@@ -15,6 +15,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -33,6 +34,13 @@ class UserResource extends Resource
     {
         // return __('app.navigation.user_management');
         return null;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->whereHas('roles', function ($query) {
+            $query->where('name', '!=', 'developer');
+        });
     }
 
     public static function form(Form $form): Form
@@ -70,7 +78,23 @@ class UserResource extends Resource
                 Forms\Components\Select::make('role_id')
                     ->label('Peran Pengguna')
                     ->placeholder('Pilih Peran Pengguna')
-                    ->relationship('roles', 'name')
+                    ->options(function () {
+
+                        $roles = Role::where('name', '!=', 'developer')->get();
+
+                        $data = [];
+
+                        foreach ($roles as $role) {
+
+                            if ($role->name == 'kepala_lab') {
+                                $data[$role->id] =  'Kepala Lab & Dosen';
+                            } else {
+                                $data[$role->id] = ucwords($role->name);
+                            }
+                        }
+
+                        return $data;
+                    })
                     ->required(),
 
                 Forms\Components\Select::make('status')

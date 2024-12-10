@@ -111,6 +111,14 @@ class AssessmentResource extends Resource
                     ->label('Praktikan')
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('schedule.topic')
+                    ->label('Modul')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('schedule.room')
+                    ->label('Kelas/Ruangan')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('score')
                     ->label('Nilai')
                     ->numeric()

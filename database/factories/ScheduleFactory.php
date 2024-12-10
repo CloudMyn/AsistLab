@@ -18,8 +18,8 @@ class ScheduleFactory extends Factory
     {
         return [
             'date' => now()->addDays(rand(1, 30)), // Menghasilkan tanggal acak
-            'start_time' => $this->faker->time(), // Menghasilkan waktu mulai acak
-            'end_time' => $this->faker->time(), // Menghasilkan waktu selesai acak
+            'start_time' => rand(0, 23) . ':' . rand(0, 59), // Menghasilkan waktu mulai acak
+            'end_time' => rand(0, 23) . ':' . rand(0, 59), // Menghasilkan waktu selesai acak
             'topic' => $this->faker->sentence(3), // Menghasilkan topik acak
             'room' => $this->faker->word(), // Menghasilkan nama ruangan acak
             'status' => 'OPEN',

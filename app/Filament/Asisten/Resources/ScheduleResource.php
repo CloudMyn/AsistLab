@@ -47,7 +47,7 @@ class ScheduleResource extends Resource
             ->schema([
 
                 Forms\Components\TextInput::make('topic')
-                    ->label('Tema/Topik')
+                    ->label('Modul')
                     ->required()
                     ->minLength(3)
                     ->maxLength(255),
@@ -68,11 +68,15 @@ class ScheduleResource extends Resource
                         Forms\Components\TimePicker::make('start_time')
                             ->label('Waktu Mulai')
                             ->minDate(today())
+                            ->format('HH:mm')
+                            ->step(60)
                             ->required(),
 
                         Forms\Components\TimePicker::make('end_time')
                             ->label('Waktu Selesai')
                             ->minDate(today())
+                            ->format('HH:mm')
+                            ->step(60)
                             ->required(),
                     ]),
 

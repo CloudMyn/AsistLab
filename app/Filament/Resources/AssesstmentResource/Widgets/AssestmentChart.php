@@ -33,7 +33,7 @@ class AssestmentChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Average Assessment Score',
+                    'label' => 'Nilai Rata-Rata',
                     'data' => $data,
                 ],
             ],
