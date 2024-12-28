@@ -27,7 +27,7 @@ class Schedule extends Model
         parent::booting();
 
         static::creating(function ($schedule) {
-            $schedule->status = 'OPEN';
+            $schedule->status = 'SCHEDULED';
 
             $schedule->asisten()->associate(get_auth_user());
         });
