@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable implements HasAvatar, FilamentUser
 {
@@ -30,7 +31,6 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         'email',
         'password',
         'avatar_url',
-        'phone_number',
         'custom_fields',
         'peran',
     ];
@@ -62,7 +62,7 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        if($this->peran == 'DEVELOPER') {
+        if ($this->peran == 'DEVELOPER') {
             return true;
         }
 
@@ -84,6 +84,53 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->avatar_url ? Storage::url("$this->avatar_url") : '/default_pp.png';
+    }
+
+
+    /**
+     * Metode Login
+     *
+     * @param array $credentials
+     * @return bool
+     */
+    public function login(array $credentials)
+    {
+        $user = static::where('email', $credentials['email'])->first();
+
+        // cek jika pengguna belum verifikasi email
+        if (!$user || !$user->hasVerifiedEmail()) {
+            return false;
+        }
+
+        // cek jika password tidak sesuai
+        if (!Hash::check($credentials['password'], $user->password)) {
+            return false;
+        }
+
+        $this->guard()->login($user);
+
+        return true;
+    }
+
+    /**
+     *  Metode register
+     *
+     *  @param array $credentials
+     *  @return User
+     */
+    public function register(array $credentials)
+    {
+        // buat user baru
+        $user = static::create([
+            'name' => $credentials['name'],
+            'username' => $credentials['username'],
+            'email' => $credentials['email'],
+            'password' => Hash::make($credentials['password']),
+            'peran' => 'PRAKTIKAN',
+        ]);
+
+        // return user yang baru dibuat
+        return $user;
     }
 
     /**
