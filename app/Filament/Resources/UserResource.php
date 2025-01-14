@@ -128,6 +128,12 @@ class UserResource extends Resource
                             ->required()
                             ->maxLength(255),
 
+                        Forms\Components\Select::make('frekuensi_id')
+                            ->label('Frekuensi')
+                            ->columnSpanFull()
+                            ->relationship('frekuensi', 'name')
+                            ->required(),
+
                     ]),
 
             ]);
@@ -146,6 +152,11 @@ class UserResource extends Resource
 
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('praktikan.frekuensi.name')
+                    ->label('Frekuensi')
+                    ->placeholder('Tidak Ada Frekuensi')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('username')

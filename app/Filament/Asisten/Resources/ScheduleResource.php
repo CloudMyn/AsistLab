@@ -3,20 +3,27 @@
 namespace App\Filament\Asisten\Resources;
 
 use App\Filament\Asisten\Resources\ScheduleResource\Pages;
-use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers;
 use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers\AttendanceRelationManager;
+use App\Models\Frekuensi;
 use App\Models\Schedule;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+
+/**
+ * Schedule Resource
+ *
+ * Resource ini digunakan untuk mengatur data Jadwal Asistensi.
+ * Resource ini di tampilkan pada menu "Jadwal Asistensi" di dashboard asistensi.
+ */
 class ScheduleResource extends Resource
 {
     protected static ?string $model = Schedule::class;
@@ -25,21 +32,48 @@ class ScheduleResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    /**
+     * Returns the label for the model.
+     *
+     * @return string
+     */
     public static function getModelLabel(): string
     {
         return "Jadwal Asistensi";
     }
 
+    /**
+     * The navigation group for this resource.
+     *
+     * @return string|null
+     */
     public static function getNavigationGroup(): ?string
     {
         return null;
     }
 
+    /**
+     * Returns the eloquent query for this resource.
+     *
+     * Includes the {@see \App\Models\User} relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('user_id', get_auth_user()->id);
     }
-
+    /**
+     * Konfigurasi skema form untuk sumber daya Jadwal.
+     *
+     * Form ini mencakup input field untuk topik, ruangan, dan status jadwal.
+     * Juga termasuk fieldset untuk memilih tanggal dan waktu jadwal.
+     * Selain itu, ia juga mencakup repeater untuk mengelola kehadiran jadwal,
+     * memungkinkan pemilihan pengguna dengan peran 'PRAKTIKAN'.
+     *
+     * @param Form $form Contoh form untuk dikonfigurasi.
+     * @return Form Contoh form yang dikonfigurasi.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -88,6 +122,23 @@ class ScheduleResource extends Resource
                             ->required(),
                     ]),
 
+                Select::make('frekuensi')
+                    ->label('Frekuensi')
+                    ->live()
+                    ->columnSpanFull()
+                    ->hiddenOn('edit')
+                    ->options(Frekuensi::all()->pluck('name', 'id'))
+                    ->afterStateUpdated(function ($state, $set) {
+                        $frekuensi = Frekuensi::find($state);
+
+                        if(!$frekuensi) return;
+
+                        $praktikans = $frekuensi->praktikans?->toArray();
+
+                        $set('attendances', $praktikans);
+                    })
+                    ->required(),
+
                 Repeater::make('attendances')
                     ->label('Daftar Praktikan')
                     ->relationship('attendances')
@@ -109,10 +160,17 @@ class ScheduleResource extends Resource
             ]);
     }
 
+    /**
+     * Mendefinisikan kolom tabel yang akan digunakan dalam tampilan daftar.
+     *
+     * @return Table
+     */
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+
+                // definisikan kolom tanggal
                 Tables\Columns\TextColumn::make('date')
                     ->label('Jadwal Asistensi')
                     ->description(function ($record) {
@@ -121,14 +179,18 @@ class ScheduleResource extends Resource
                     ->date('d F Y')
                     ->sortable(),
 
+
+                // definisikan kolom topik
                 Tables\Columns\TextColumn::make('topic')
                     ->label('Topik')
                     ->searchable(),
 
+                // definisikan kolom room
                 Tables\Columns\TextColumn::make('room')
                     ->label('Ruangan')
                     ->searchable(),
 
+                // definisikan kolom status
                 Tables\Columns\SelectColumn::make('status')
                     ->label('Status')
                     ->options([
@@ -164,6 +226,11 @@ class ScheduleResource extends Resource
             ]);
     }
 
+    /**
+     * Get the relation managers that should be available for the resource.
+     *
+     * @return array
+     */
     public static function getRelations(): array
     {
         return [
@@ -171,6 +238,11 @@ class ScheduleResource extends Resource
         ];
     }
 
+    /**
+     * Mendefinisikan halaman yang tersedia untuk sumber daya Jadwal Asistensi.
+     *
+     * @return array
+     */
     public static function getPages(): array
     {
         return [

@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Tabel ini berisi data jadwal asistensi.
+        // Jadwal asistensi ini di buat oleh asisten dan diatur berdasarkan tanggal, waktu mulai, waktu selesai, topik, dan ruangan.
+        // Jadwal asistensi ini juga memiliki status yang dapat berupa 'SCHEDULED', 'CANCELLED', atau 'COMPLETED'.
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->date('date');
@@ -22,6 +25,7 @@ return new class extends Migration
             $table->enum('status', ['SCHEDULED', 'CANCELLED', 'COMPLETED'])->default('SCHEDULED');
             $table->timestamps();
 
+            // Jadwal asistensi yang sama tidak dapat di buat dua kali
             $table->unique(['date', 'start_time', 'end_time', 'room']);
         });
     }

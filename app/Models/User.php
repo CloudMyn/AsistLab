@@ -97,11 +97,6 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
     {
         $user = static::where('email', $credentials['email'])->first();
 
-        // cek jika pengguna belum verifikasi email
-        if (!$user || !$user->hasVerifiedEmail()) {
-            return false;
-        }
-
         // cek jika password tidak sesuai
         if (!Hash::check($credentials['password'], $user->password)) {
             return false;
