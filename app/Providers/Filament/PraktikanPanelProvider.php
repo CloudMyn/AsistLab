@@ -36,7 +36,6 @@ class PraktikanPanelProvider extends PanelProvider
             ->brandLogo('/fikom.jpg')
             ->brandName('Fakultas Ilmu Komputer')
             ->brandLogoHeight('30px')
-            ->registration(RegistrationPage::class)
             ->passwordReset()
             ->darkMode(false)
             ->colors([

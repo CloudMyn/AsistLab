@@ -141,11 +141,10 @@ class ScheduleResource extends Resource
 
                 Repeater::make('attendances')
                     ->label('Daftar Praktikan')
-                    ->relationship('attendances')
+                    ->addable(false)
                     ->columnSpanFull()
-                    ->minItems(1)
-                    ->maxItems(10)
                     ->hiddenOn('edit')
+                    ->disabled()
                     ->simple(
                         Forms\Components\Select::make('user_id')
                             ->label('Praktikan')
@@ -211,7 +210,7 @@ class ScheduleResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('date', 'asc')
+            ->defaultSort('date', 'desc')
             ->filters([
                 //
             ])
