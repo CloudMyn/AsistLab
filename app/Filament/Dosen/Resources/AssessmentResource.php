@@ -7,6 +7,7 @@ use App\Filament\Dosen\Resources\AssessmentResource\RelationManagers;
 use App\Models\Assessment;
 use App\Models\Attendance;
 use App\Models\Schedule;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -24,6 +25,20 @@ class AssessmentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
     protected static ?int $navigationSort = 3;
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = static::getModel()::query()->where('approved_at', null);
+
+        if (
+            static::isScopedToTenant() &&
+            ($tenant = Filament::getTenant())
+        ) {
+            static::scopeEloquentQueryToTenant($query, $tenant);
+        }
+
+        return $query;
+    }
 
     public static function getModelLabel(): string
     {
