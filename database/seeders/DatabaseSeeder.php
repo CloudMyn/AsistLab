@@ -34,7 +34,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'kepala_lab',
             'username' => 'kepala_lab',
             'email' => 'kepala_lab@mail.io',
-            'peran' => 'KEPALA_LAB_DAN_DOSEN',
+            'peran' => 'KEPALA_LAB',
+        ]);
+
+        $kepala_lab = User::factory()->create([
+            'name' => 'dosen',
+            'username' => 'dosen',
+            'email' => 'dosen@mail.io',
+            'peran' => 'DOSEN',
         ]);
 
         for ($i = 0; $i < 5; $i++) {
@@ -62,5 +69,12 @@ class DatabaseSeeder extends Seeder
                 'jurusan' => fake()->word(),
             ]);
         }
+
+        $this->call([
+            MataKuliahSeeder::class,
+            FrekuensiSeeder::class,
+        ]);
+
+        Praktikan::factory(100)->create();
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\KepalaLab\Resources;
+namespace App\Filament\Dosen\Resources;
 
-use App\Filament\KepalaLab\Resources\AssessmentResource\Pages;
-use App\Filament\KepalaLab\Resources\AssessmentResource\RelationManagers;
+use App\Filament\Dosen\Resources\AssessmentResource\Pages;
+use App\Filament\Dosen\Resources\AssessmentResource\RelationManagers;
 use App\Models\Assessment;
 use App\Models\Attendance;
 use App\Models\Schedule;
@@ -153,12 +153,6 @@ class AssessmentResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('approved_at')
-                    ->label('Disetujui Pada')
-                    ->sortable()
-                    ->placeholder('Belum Disetujui')
-                    ->toggleable(isToggledHiddenByDefault: false),
-
                 Tables\Columns\TextColumn::make('score')
                     ->label('Nilai')
                     ->numeric()
@@ -193,24 +187,6 @@ class AssessmentResource extends Resource
                     }),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('setujui')
-                    ->label('Setujui')
-                    ->color('success')
-                    ->disabled(function ($record) {
-                        return $record->approved_at !== null;
-                    })
-                    ->icon('heroicon-s-check-circle')
-                    ->action(function (Assessment $record) {
-                        $record->update([
-                            'approved_at'   =>   now(),
-                            'approver_id'   =>   get_auth_user()->id,
-                        ]);
-
-                        Notification::make()
-                            ->success()
-                            ->title('Penilaian Asistensi Berhasil Disetujui')
-                            ->send();
-                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

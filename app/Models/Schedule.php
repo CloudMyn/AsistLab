@@ -16,6 +16,7 @@ class Schedule extends Model
 
     public $fillable = [
         'user_id',
+        'mata_kuliah_id',
         'date',
         'start_time',
         'end_time',
@@ -89,5 +90,10 @@ class Schedule extends Model
     public function room_chats()
     {
         return $this->hasMany(RoomChat::class);
+    }
+
+    public function mata_kuliah()
+    {
+        return $this->belongsTo(MataKuliah::class, 'mata_kuliah_id');
     }
 }

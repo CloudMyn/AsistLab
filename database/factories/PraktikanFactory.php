@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Frekuensi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class PraktikanFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory()->create()->id,
+            'kelas' => $this->faker->randomElement(['A', 'B', 'C']),
+            'jurusan' => $this->faker->randomElement(['TI', 'SI', 'DKV']),
+            'frekuensi_id' => Frekuensi::inRandomOrder()->first()->id
         ];
     }
 }

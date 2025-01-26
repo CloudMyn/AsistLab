@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('')
             ->login(\App\Filament\Auth\CustomLogin::class)
             ->brandLogo('/fikom.jpg')
             ->brandName('Fakultas Ilmu Komputer')

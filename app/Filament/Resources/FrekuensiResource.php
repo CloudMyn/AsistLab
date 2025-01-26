@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\FrekuensiResource\Pages;
 use App\Filament\Resources\FrekuensiResource\RelationManagers;
 use App\Models\Frekuensi;
+use App\Models\MataKuliah;
 use App\Models\Praktikan;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
@@ -22,15 +23,23 @@ class FrekuensiResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    protected static ?int $navigationSort = -1;
+
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->columnSpanFull()
                     ->minLength(3)
+                    ->unique('frekuensis', 'name', ignoreRecord: true)
                     ->maxLength(255),
+
+                Forms\Components\Select::make('mata_kuliah_id')
+                    ->label('Mata Kuliah')
+                    ->options(MataKuliah::get()->pluck('nama', 'id')),
 
                 Forms\Components\Repeater::make('praktikans')
                     ->label('Daftar Praktikan')
@@ -62,13 +71,19 @@ class FrekuensiResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+
+                Tables\Columns\TextColumn::make('mata_kuliah.nama')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('praktikan_count')
+                    ->default(function ($record) {
+                        return $record->praktikans()->count();
+                    })
+                    ->badge()
+                    ->label('Praktikan'),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Diperbarui Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
@@ -85,11 +100,13 @@ class FrekuensiResource extends Resource
 
                         $frekuensi->update([
                             'name'  =>  $data['name'],
+                            'mata_kuliah_id'    =>  $data['mata_kuliah_id']
                         ]);
 
-                        $praktikans = $data['praktikans'];
+                        $praktikans =   $data['praktikans'];
 
                         foreach ($praktikans as $praktikan_id) {
+
                             $praktikan = Praktikan::find($praktikan_id);
 
                             $praktikan->update([
@@ -113,8 +130,9 @@ class FrekuensiResource extends Resource
                         }
 
                         $data = [
-                            'name'          =>  $record->name,
-                            'praktikans'    =>  $praktikans,
+                            'name'              =>  $record->name,
+                            'mata_kuliah_id'    =>  $record->mata_kuliah_id,
+                            'praktikans'        =>  $praktikans,
                         ];
 
                         return $data;

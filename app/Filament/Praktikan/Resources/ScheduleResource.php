@@ -2,6 +2,8 @@
 
 namespace App\Filament\Praktikan\Resources;
 
+use App\Filament\Asisten\Resources\ScheduleResource as ResourcesScheduleResource;
+use App\Filament\Asisten\Resources\ScheduleResource\RelationManagers\AttendanceRelationManager;
 use App\Filament\Praktikan\Resources\ScheduleResource\Pages;
 use App\Filament\Praktikan\Resources\ScheduleResource\RelationManagers;
 use App\Infolists\Components\ChatBubble;
@@ -18,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -84,6 +87,9 @@ class ScheduleResource extends Resource
                 Forms\Components\TextInput::make('topic')
                     ->label('Modul'),
 
+                Forms\Components\TextInput::make('mata_kuliah.nama')
+                    ->label('Mata Kuliah'),
+
                 Forms\Components\TextInput::make('room')
                     ->label('Kelas/Ruangan'),
 
@@ -116,6 +122,10 @@ class ScheduleResource extends Resource
 
                 Tables\Columns\TextColumn::make('topic')
                     ->label('Topik')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('mata_kuliah.nama')
+                    ->label('Mata Kuliag')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('room')
@@ -188,6 +198,10 @@ class ScheduleResource extends Resource
                                 Notification::make()
                                     ->title('Pesan Baru')
                                     ->body('Anda mendapatkan pesan baru dari ' . get_auth_user()->name)
+                                    ->actions([
+                                        Action::make('Buka Chat')
+                                            ->url(ResourcesScheduleResource::getUrl('edit', ['record' => $record, 'action' => 'chat', 'praktikan_id' => get_auth_user()->id], isAbsolute: false)),
+                                    ])
                                     ->color('info')
                                     ->sendToDatabase($record->asisten);
 

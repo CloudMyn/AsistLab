@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Asisten\Resources\AssessmentResource\Pages;
+namespace App\Filament\Dosen\Resources\AssessmentResource\Pages;
 
-use App\Filament\Asisten\Resources\AssessmentResource;
+use App\Filament\Dosen\Resources\AssessmentResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

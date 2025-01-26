@@ -16,6 +16,7 @@ return new class extends Migration
         // Jadwal asistensi ini juga memiliki status yang dapat berupa 'SCHEDULED', 'CANCELLED', atau 'COMPLETED'.
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            $table->string('mata_kuliah_id');
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');

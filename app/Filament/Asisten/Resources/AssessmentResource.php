@@ -103,25 +103,55 @@ class AssessmentResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('schedule.mata_kuliah.nama')
+                    ->label('Mata Kuliah')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('attendance.praktikan.praktikan.frekuensi.name')
+                    ->label('Frekuensi')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+
                 Tables\Columns\TextColumn::make('schedule.date')
                     ->label('Jadwal Asistensi')
-                    ->sortable(),
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 Tables\Columns\TextColumn::make('attendance.praktikan.name')
                     ->label('Praktikan')
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('attendance.praktikan.praktikan.kelas')
-                    ->label('Kelas Praktikan')
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('attendance.praktikan.praktikan.jurusan')
-                    ->label('Jurusan Praktikan')
+                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('schedule.topic')
-                    ->label('Modul Asistensi')
-                    ->sortable(),
+                    ->label('Topik')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+
+                Tables\Columns\TextColumn::make('attendance.schedule.asisten.name')
+                    ->label('Asisten')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('attendance.praktikan.praktikan.kelas')
+                    ->label('Kelas Praktikan')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('attendance.praktikan.praktikan.jurusan')
+                    ->label('Jurusan Praktikan')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('approved_at')
+                    ->label('Disetujui Pada')
+                    ->sortable()
+                    ->placeholder('Belum Disetujui')
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 Tables\Columns\TextColumn::make('score')
                     ->label('Nilai')

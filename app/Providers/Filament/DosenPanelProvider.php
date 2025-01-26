@@ -2,9 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Auth\RegistrationPage;
 use App\Filament\Widgets\AccountWidget;
-use App\Livewire\CustomProfileComponent;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -25,30 +23,28 @@ use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 
-class PraktikanPanelProvider extends PanelProvider
+class DosenPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('praktikan')
+            ->id('dosen')
             ->path('')
             ->login()
             ->brandLogo('/fikom.jpg')
             ->brandName('Fakultas Ilmu Komputer')
             ->brandLogoHeight('30px')
-            ->passwordReset()
-            ->darkMode(false)
             ->colors([
-                'primary' => Color::Sky,
+                'primary' => Color::Indigo,
             ])
-            ->discoverResources(in: app_path('Filament/Praktikan/Resources'), for: 'App\\Filament\\Praktikan\\Resources')
-            ->discoverPages(in: app_path('Filament/Praktikan/Pages'), for: 'App\\Filament\\Praktikan\\Pages')
+            ->discoverResources(in: app_path('Filament/Dosen/Resources'), for: 'App\\Filament\\Dosen\\Resources')
+            ->discoverPages(in: app_path('Filament/Dosen/Pages'), for: 'App\\Filament\\Dosen\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Praktikan/Widgets'), for: 'App\\Filament\\Praktikan\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Dosen/Widgets'), for: 'App\\Filament\\Dosen\\Widgets')
             ->widgets([
-                AccountWidget::class
+                AccountWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -100,13 +96,13 @@ class PraktikanPanelProvider extends PanelProvider
                         rules: 'mimes:jpeg,png|max:' . 1024 * 3 //only accept jpeg and png files with a maximum size of 3MB
                     ),
             ])
+            ->darkMode(false)
             ->spa(config('dashboard.panel.single_page_aplication'))
             ->databaseNotifications()
-            ->databaseNotificationsPolling('5s')
             ->navigationGroups([])
             ->favicon('/favicon.png')
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->domain(env('PRAKTIKAN_DOMAIN', null))
+            ->domain(env('DOSEN_DOMAIN', null))
             ->topNavigation(config('dashboard.panel.top_navigation'));
     }
 }

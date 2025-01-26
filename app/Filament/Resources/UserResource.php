@@ -75,7 +75,7 @@ class UserResource extends Resource
                         'ADMIN' => 'Admin',
                         'ASISTEN' => 'Asisten',
                         'PRAKTIKAN' => 'Praktikan',
-                        'KEPALA_LAB_DAN_DOSEN' => 'Kepala Lab & Dosen',
+                        'KEPALA_LAB' => 'Kepala Lab & Dosen',
                     ])
                     ->required(),
 

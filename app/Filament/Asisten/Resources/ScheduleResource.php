@@ -16,7 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-
+use Livewire\Attributes\On;
 
 /**
  * Schedule Resource
@@ -77,7 +77,14 @@ class ScheduleResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(3)
             ->schema([
+
+                Forms\Components\Select::make('mata_kuliah_id')
+                    ->required()
+                    ->relationship('mata_kuliah', 'nama')
+                    ->live()
+                    ->label('Mata Kuliah'),
 
                 Forms\Components\TextInput::make('topic')
                     ->label('Modul')
@@ -85,10 +92,18 @@ class ScheduleResource extends Resource
                     ->minLength(3)
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('room')
+                Forms\Components\Select::make('room')
                     ->label('Kelas/Ruangan')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        "Startup" => "Startup",
+                        "IoT" => "IoT",
+                        "Computer Network" => "Computer Network",
+                        "Computer Vision" => "Computer Vision",
+                        "Multimedia" => "Multimedia",
+                        "Data Science" => "Data Science",
+                        "Microcontroller" => "Microcontroller"
+                    ]),
 
 
                 Forms\Components\Select::make('status')
@@ -127,13 +142,29 @@ class ScheduleResource extends Resource
                     ->live()
                     ->columnSpanFull()
                     ->hiddenOn('edit')
-                    ->options(Frekuensi::all()->pluck('name', 'id'))
-                    ->afterStateUpdated(function ($state, $set) {
+                    ->preload()
+                    ->disabled(function ($get) {
+                        return $get('mata_kuliah_id') == null;
+                    })
+                    ->options(function ($get) {
+                        $mata_kuliah_id = $get('mata_kuliah_id');
+
+                        if (!$mata_kuliah_id) return [];
+
+                        return Frekuensi::where('mata_kuliah_id', $mata_kuliah_id)->pluck('name', 'id');
+                    })
+                    ->afterStateUpdated(function ($state, $set, $get) {
                         $frekuensi = Frekuensi::find($state);
 
-                        if(!$frekuensi) return;
+                        if (!$frekuensi) return;
 
-                        $praktikans = $frekuensi->praktikans?->toArray();
+                        $praktikans = [];
+
+                        foreach ($frekuensi->praktikans as $praktikan) {
+                            $praktikans[] = [
+                                'user_id' => $praktikan->user->name,
+                            ];
+                        }
 
                         $set('attendances', $praktikans);
                     })
@@ -146,15 +177,8 @@ class ScheduleResource extends Resource
                     ->hiddenOn('edit')
                     ->disabled()
                     ->simple(
-                        Forms\Components\Select::make('user_id')
-                            ->label('Praktikan')
-                            ->placeholder('Pilih Praktikan')
-                            ->options(function (Builder $query) {
-                                return User::where('peran', 'PRAKTIKAN')->get()->pluck('name', 'id');
-                            })
-                            ->required()
-                            ->distinct()
-                            ->searchable(),
+                        Forms\Components\TextInput::make('user_id')
+                            ->label('Praktikan'),
                     ),
             ]);
     }
@@ -178,10 +202,14 @@ class ScheduleResource extends Resource
                     ->date('d F Y')
                     ->sortable(),
 
-
                 // definisikan kolom topik
                 Tables\Columns\TextColumn::make('topic')
                     ->label('Topik')
+                    ->searchable(),
+
+                // definisikan kolom topik
+                Tables\Columns\TextColumn::make('mata_kuliah.nama')
+                    ->label('Mata Kuliah')
                     ->searchable(),
 
                 // definisikan kolom room

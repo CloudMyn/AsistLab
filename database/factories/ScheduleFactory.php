@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\MataKuliah;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class ScheduleFactory extends Factory
     public function definition(): array
     {
         return [
+            'mata_kuliah_id' => MataKuliah::inRandomOrder()->first()->id,
             'date' => now()->addDays(rand(1, 30)), // Menghasilkan tanggal acak
             'start_time' => rand(0, 23) . ':' . rand(0, 59), // Menghasilkan waktu mulai acak
             'end_time' => rand(0, 23) . ':' . rand(0, 59), // Menghasilkan waktu selesai acak

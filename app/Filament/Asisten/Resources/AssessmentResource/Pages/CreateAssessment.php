@@ -10,7 +10,7 @@ class CreateAssessment extends CreateRecord
 {
     protected static string $resource = AssessmentResource::class;
 
-    protected static bool $canCreateAnother = false;
+    protected static bool $canCreateAnother = true;
 
     protected function getRedirectUrl(): string
     {

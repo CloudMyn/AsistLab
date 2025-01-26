@@ -14,7 +14,7 @@ class ManageFrekuensis extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            Actions\CreateAction::make()->label('Tambah')
                 ->action(function ($data) {
 
                     $frekuensi = \App\Models\Frekuensi::create([

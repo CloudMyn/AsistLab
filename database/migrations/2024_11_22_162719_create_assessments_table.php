@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('attendance_id')->constrained('attendances')->onDelete('cascade');
             $table->integer('score');
             $table->text('comments')->nullable();
+            $table->foreignId('approver_id')->nullable()->constrained('users', 'id')->onDelete('cascade');
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }

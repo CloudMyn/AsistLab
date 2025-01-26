@@ -13,7 +13,7 @@ class {{ resourcePageClass }} extends {{ baseResourcePageClass }}
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('Tambah'),
         ];
     }
 }

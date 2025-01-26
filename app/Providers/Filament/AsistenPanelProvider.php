@@ -29,7 +29,7 @@ class AsistenPanelProvider extends PanelProvider
     {
         return $panel
             ->id('asisten')
-            ->path('asisten')
+            ->path('')
             ->login()
             ->darkMode(false)
             ->brandLogo('/fikom.jpg')

@@ -15,6 +15,8 @@ class Assessment extends Model
         'attendance_id',
         'score',
         'comments',
+        'approved_at',
+        'approved_at',
     ];
 
     public function schedule()
