@@ -28,7 +28,7 @@ class AssessmentResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = static::getModel()::query()->where('approved_at', null);
+        $query = static::getModel()::query()->where('approved_at', '!=', null);
 
         if (
             static::isScopedToTenant() &&
