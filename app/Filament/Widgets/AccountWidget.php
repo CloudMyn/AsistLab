@@ -11,7 +11,7 @@ class AccountWidget extends Widget
 
     protected int | string | array $columnSpan = 'full';
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = -10;
 
     protected function getHeading(): string
     {
