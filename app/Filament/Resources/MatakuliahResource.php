@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MatakuliahResource\Pages;
 use App\Filament\Resources\MatakuliahResource\RelationManagers;
 use App\Models\Frekuensi;
-use App\Models\Matakuliah;
+use App\Models\MataKuliah;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
