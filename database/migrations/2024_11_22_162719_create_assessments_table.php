@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('schedule_id')->constrained()->onDelete('cascade');
-            $table->foreignId('attendance_id')->constrained('attendances')->onDelete('cascade');
+            $table->foreignId('attendance_id')->constrained('attendances')->onDelete(action: 'cascade');
+            $table->foreignId('assessment_schedule_id')->nullable()->constrained('assessment_schedules')->onDelete('cascade');
             $table->integer('score');
             $table->text('comments')->nullable();
-            $table->foreignId('approver_id')->nullable()->constrained('users', 'id')->onDelete('cascade');
-            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['schedule_id', 'attendance_id']);
         });
     }
 

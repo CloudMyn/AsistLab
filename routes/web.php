@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PDFEksporter;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,3 +21,6 @@ Route::get('/', function () {
         return redirect()->route('filament.praktikan.auth.login');
     }
 });
+
+
+Route::get('pdf-export-penilaian/{id}', [PDFEksporter::class, 'export_penilaian'])->name('pdf-export-penilaian');

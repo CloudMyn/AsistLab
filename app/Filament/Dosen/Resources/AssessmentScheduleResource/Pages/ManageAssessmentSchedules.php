@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Filament\KepalaLab\Resources\AssessmentResource\Pages;
+namespace App\Filament\Dosen\Resources\AssessmentScheduleResource\Pages;
 
-use App\Filament\KepalaLab\Resources\AssessmentResource;
+use App\Filament\Dosen\Resources\AssessmentScheduleResource;
 use App\Filament\Resources\AssesstmentResource\Widgets\AssestmentChart;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListAssessments extends ListRecords
+class ManageAssessmentSchedules extends ManageRecords
 {
-    protected static string $resource = AssessmentResource::class;
+    protected static string $resource = AssessmentScheduleResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()->label('Tambah'),
-
         ];
     }
 

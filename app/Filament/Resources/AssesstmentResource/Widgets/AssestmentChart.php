@@ -22,7 +22,6 @@ class AssestmentChart extends ChartWidget
         $usersWithAverageScore = DB::table('users')
             ->join('attendances', 'users.id', '=', 'attendances.user_id')
             ->join('assessments', 'attendances.id', '=', 'assessments.attendance_id')
-            ->where('assessments.approved_at', '!=', null)
             ->select('users.name', DB::raw('AVG(assessments.score) as average_score'))
             ->groupBy('users.name')
             ->get();

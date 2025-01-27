@@ -147,7 +147,7 @@ class AssessmentResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('approved_at')
+                Tables\Columns\TextColumn::make('assessmentSchedule.approved_at')
                     ->label('Disetujui Pada')
                     ->sortable()
                     ->placeholder('Belum Disetujui')
