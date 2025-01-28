@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Filament\Dosen\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Dosen\Resources\AssessmentScheduleResource\Pages;
-use App\Filament\Dosen\Resources\AssessmentScheduleResource\RelationManagers;
+use App\Filament\Resources\AssessmentScheduleResource\Pages;
+use App\Filament\Resources\AssessmentScheduleResource\RelationManagers;
 use App\Models\AssessmentSchedule;
-use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -27,20 +27,6 @@ class AssessmentScheduleResource extends Resource
     public static function getModelLabel(): string
     {
         return "Penilaian Asistensi";
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        $query = static::getModel()::query()->where('approved_at', '!=', null);
-
-        if (
-            static::isScopedToTenant() &&
-            ($tenant = Filament::getTenant())
-        ) {
-            static::scopeEloquentQueryToTenant($query, $tenant);
-        }
-
-        return $query;
     }
 
     public static function getNavigationGroup(): ?string
@@ -93,9 +79,6 @@ class AssessmentScheduleResource extends Resource
                 Forms\Components\TextInput::make('topik')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('nilai')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('approver_id')
                     ->numeric(),
                 Forms\Components\DateTimePicker::make('approved_at'),
@@ -116,6 +99,12 @@ class AssessmentScheduleResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('asisten')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('approved_at')
+                    ->label('Disetujui Pada')
+                    ->dateTime()
+                    ->sortable()
+                    ->placeholder('Belum Disetujui')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -126,7 +115,6 @@ class AssessmentScheduleResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -151,7 +139,9 @@ class AssessmentScheduleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageAssessmentSchedules::route('/'),
+            'index' => Pages\ListAssessmentSchedules::route('/'),
+            'create' => Pages\CreateAssessmentSchedule::route('/create'),
+            'edit' => Pages\EditAssessmentSchedule::route('/{record}/edit'),
         ];
     }
 }

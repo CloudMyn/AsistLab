@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -80,6 +81,14 @@ class MatakuliahResource extends Resource
                     ->badge()
                     ->label('Frekuensi'),
 
+                Tables\Columns\TextColumn::make('semester')
+                    ->searchable()
+                    ->placeholder('Belum Dipilih'),
+
+                Tables\Columns\TextColumn::make('tahun_akademik')
+                    ->searchable()
+                    ->placeholder('Tidak Ada'),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -92,7 +101,49 @@ class MatakuliahResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+
+                Filter::make('semester')
+                    ->label('Featured')
+                    ->form([
+                        Forms\Components\Select::make('semester')
+                            ->label('Semester')
+                            ->default('all')
+                            ->options([
+                                'all'      =>  'Semua',
+                                'Gasal'    =>  'Gasal',
+                                'Genap'    =>  'Genap',
+                            ])
+                    ])->query(function (Builder $query, array $data): Builder {
+                        $semester = $data['semester'];
+
+                        if ($semester == 'all') {
+                            return $query;
+                        }
+
+                        if ($semester == 'Gasal') {
+                            $query->where('semester', '=', 'Gasal');
+                        } else if ($semester == 'Genap') {
+                            $query->where('semester', '=', 'Genap');
+                        }
+
+                        return $query;
+                    }),
+
+                Filter::make('tahun')
+                    ->label('Tahun')
+                    ->form([
+                        Forms\Components\TextInput::make('tahun')
+                            ->label('Tahun')
+                            ->numeric(),
+                    ])->query(function (Builder $query, array $data): Builder {
+                        $tahun = $data['tahun'];
+
+                        if (!$tahun) {
+                            return $query;
+                        }
+
+                        return $query->where('tahun_akademik', '=', $tahun);
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

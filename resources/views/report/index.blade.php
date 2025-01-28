@@ -140,8 +140,9 @@
         <table class='table table-bordered mko-table' style="width: 100%;">
             <thead>
                 <tr>
-                    <th>NAMA</th>
-                    <th>NILAI</th>
+                    <th></th>
+                    {{-- <th>NAMA</th>
+                    <th>NILAI</th> --}}
                 </tr>
             </thead>
             <tbody style="position: relative; width: 100%">

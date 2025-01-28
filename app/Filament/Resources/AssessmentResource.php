@@ -24,6 +24,8 @@ class AssessmentResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function getModelLabel(): string
     {
         return "Penilaian Asistensi";
@@ -43,6 +45,7 @@ class AssessmentResource extends Resource
     {
         return false;
     }
+
 
     public static function form(Form $form): Form
     {

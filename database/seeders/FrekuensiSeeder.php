@@ -115,7 +115,7 @@ class FrekuensiSeeder extends Seeder
 
             if ($mataKuliah) {
                 Frekuensi::create([
-                    'name' => $name,
+                    'name' => strtoupper($name),
                     'mata_kuliah_id' => $mataKuliah->id,
                 ]);
             }

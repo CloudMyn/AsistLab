@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -78,9 +79,6 @@ class AssessmentScheduleResource extends Resource
                 Forms\Components\TextInput::make('topik')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('nilai')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('approver_id')
                     ->numeric(),
                 Forms\Components\DateTimePicker::make('approved_at'),
@@ -101,9 +99,6 @@ class AssessmentScheduleResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('asisten')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nilai')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('approved_at')
                     ->label('Disetujui Pada')
                     ->dateTime()
@@ -120,7 +115,6 @@ class AssessmentScheduleResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -146,6 +140,12 @@ class AssessmentScheduleResource extends Resource
                             'approved_at'   =>   now(),
                             'approver_id'   =>   get_auth_user()->id,
                         ]);
+
+                        Notification::make()
+                            ->success()
+                            ->title('Penilaian Asistensi')
+                            ->body('Penilaian Asistensi Pada Tanggal ' . $record->jadwal  . '  Berhasil Disetujui')
+                            ->sendToDatabase($record->asisten_id);
 
                         Notification::make()
                             ->success()

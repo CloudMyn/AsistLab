@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('mata_kuliahs', function (Blueprint $table) {
             $table->id();
             $table->string('nama')->unique();
+            $table->string('tahun_akademik')->nullable();
+            $table->enum('semester', ['GASAL', 'GENAP'])->nullable();
             $table->timestamps();
         });
     }

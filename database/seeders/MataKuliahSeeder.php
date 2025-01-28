@@ -32,7 +32,7 @@ class MataKuliahSeeder extends Seeder
         // Masukkan data ke dalam tabel mata_kuliah
         foreach ($mataKuliahList as $nama) {
             MataKuliah::create([
-                'nama' => $nama,
+                'nama' => ucwords($nama),
             ]);
         }
     }

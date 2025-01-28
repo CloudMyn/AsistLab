@@ -13,14 +13,18 @@ class PDFEksporter extends Controller
 
         $user = get_auth_user();
 
+        $carbon = \Carbon\Carbon::createFromDate($assessment->jadwal);
+
         $data_asistensi  =   [
-            'mata_kuliah'   =>  $assessment->mata_kuliah,
-            'frekuensi'     =>  $assessment->frekuensi,
-            'jadwal'        =>  $assessment->jadwal,
-            'asisten'       =>  $assessment->asisten,
-            'topik'         =>  $assessment->topik,
-            'total nilai'   =>  $assessment->nilai,
-            'Disetujui'     =>  $assessment->approved_at ?? 'Belum Disetujui',
+            'mata kuliah'       =>  $assessment->mata_kuliah,
+            'semester'          =>  getSemester($assessment->created_at),
+            'tahun akademik'    =>  $assessment->created_at->year,
+            'frekuensi'         =>  $assessment->frekuensi,
+            'jadwal'            =>  $carbon->isoFormat('dddd, D MMMM Y'),
+            'asisten'           =>  $assessment->asisten,
+            'topik'             =>  $assessment->topik,
+            // 'total nilai'   =>  $assessment->nilai,
+            // 'Disetujui'     =>  $assessment->approved_at ?? 'Belum Disetujui',
         ];
 
         $formated_table =   [];

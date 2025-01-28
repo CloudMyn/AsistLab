@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 function get_auth_user(): User
@@ -54,3 +55,17 @@ function send_danger_notification($title, $message, $users)
         ->danger();
 }
 
+// Fungsi untuk menentukan semester berdasarkan tanggal
+function getSemester($createdAt)
+{
+    $date = Carbon::parse($createdAt); // Parse tanggal menggunakan Carbon
+
+    $month = $date->month; // Ambil bulan dari tanggal
+
+    // Tentukan semester berdasarkan bulan
+    if ($month >= 7 && $month <= 12) {
+        return 'Gasal';
+    } else {
+        return 'Genap';
+    }
+}

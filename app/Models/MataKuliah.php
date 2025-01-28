@@ -12,6 +12,8 @@ class MataKuliah extends Model
 
     protected $fillable = [
         'nama',
+        'tahun_akademik',
+        'semester',
     ];
 
     protected $width = ['frekuensi'];
