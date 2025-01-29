@@ -35,6 +35,18 @@ class MatakuliahResource extends Resource
                     ->unique('mata_kuliahs', 'nama', ignoreRecord: true)
                     ->maxLength(255),
 
+                Forms\Components\Select::make('semester')
+                    ->required()
+                    ->options([
+                        'GASAL' => 'Gasal',
+                        'GENAP' => 'Genap',
+                    ]),
+
+                Forms\Components\TextInput::make('tahun_akademik')
+                    ->required()
+                    ->columnSpanFull()
+                    ->maxLength(255),
+
                 Forms\Components\Repeater::make('frekuensis')
                     ->label('Daftar Frekuensi')
                     ->columnSpanFull()
