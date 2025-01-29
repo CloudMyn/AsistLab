@@ -142,7 +142,7 @@ class MatakuliahResource extends Resource
                     }),
 
                 Filter::make('tahun')
-                    ->label('Tahun')
+                    ->label('Tahun Akademik')
                     ->form([
                         Forms\Components\TextInput::make('tahun')
                             ->label('Tahun')
