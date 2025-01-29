@@ -44,7 +44,6 @@ class MatakuliahResource extends Resource
 
                 Forms\Components\TextInput::make('tahun_akademik')
                     ->required()
-                    ->columnSpanFull()
                     ->numeric()
                     ->maxLength(255),
 
