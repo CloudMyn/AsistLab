@@ -145,7 +145,7 @@ class MatakuliahResource extends Resource
                     ->label('Tahun Akademik')
                     ->form([
                         Forms\Components\TextInput::make('tahun')
-                            ->label('Tahun')
+                            ->label('Tahun Akademik')
                             ->numeric(),
                     ])->query(function (Builder $query, array $data): Builder {
                         $tahun = $data['tahun'];
