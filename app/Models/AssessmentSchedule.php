@@ -21,8 +21,13 @@ class AssessmentSchedule extends Model
         'nilai',
         'approver_id',
         'approved_at',
+        'dosen_id',
     ];
 
+    public function asisten_model()
+    {
+        return $this->belongsTo(User::class, 'asisten_id', 'id');
+    }
 
     public function schedule()
     {

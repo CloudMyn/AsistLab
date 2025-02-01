@@ -39,9 +39,9 @@ class AppServiceProvider extends ServiceProvider
             fn (): string => Blade::render('<livewire:account-navbar />'),
         );
 
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::TOPBAR_START,
-            fn (): string => "<h1 style='font-size: 23px; font-weight: bold'>" . config('app.name') . "</h1>",
-        );
+        // FilamentView::registerRenderHook(
+        //     PanelsRenderHook::TOPBAR_START,
+        //     fn (): string => "<h1 style='font-size: 23px; font-weight: bold'>" . config('app.name') . "</h1>",
+        // );
     }
 }

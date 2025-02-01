@@ -313,8 +313,6 @@ class DatabaseSeeder extends Seeder
                         ]);
                     }
 
-
-
                     $i_x++;
                 }
             }

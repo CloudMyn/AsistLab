@@ -28,22 +28,22 @@ class CreateMatakuliah extends CreateRecord
             return $this->associateRecordWithTenant($record, $tenant);
         }
 
-        try {
-            $frekuensis = $data['frekuensis'] ?? [];
+        // try {
+        //     $frekuensis = $data['frekuensis'] ?? [];
 
-            unset($data['frekuensis']);
+        //     unset($data['frekuensis']);
 
-            $record->save();
+        //     $record->save();
 
-            foreach ($frekuensis as $frekuensi_id) {
-                $frekuensi = Frekuensi::find($frekuensi_id);
+        //     foreach ($frekuensis as $frekuensi_id) {
+        //         $frekuensi = Frekuensi::find($frekuensi_id);
 
-                $frekuensi->update([
-                    'mata_kuliah_id'  =>  $record->id
-                ]);
-            }
-        } catch (\Throwable $th) {
-        }
+        //         $frekuensi->update([
+        //             'mata_kuliah_id'  =>  $record->id
+        //         ]);
+        //     }
+        // } catch (\Throwable $th) {
+        // }
 
         return $record;
     }

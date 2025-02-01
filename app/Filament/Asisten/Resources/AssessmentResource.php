@@ -7,6 +7,7 @@ use App\Filament\Asisten\Resources\AssessmentResource\RelationManagers;
 use App\Models\Assessment;
 use App\Models\Attendance;
 use App\Models\Schedule;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -87,11 +88,17 @@ class AssessmentResource extends Resource
                         return $attendances;
                     }),
 
+                Forms\Components\Select::make('dosen_id')
+                    ->label('Dosen')
+                    ->required()
+                    ->searchable()
+                    ->placeholder('Pilih Dosen')
+                    ->options(User::where('peran', 'DOSEN')->get()->pluck('name', 'id')),
+
                 Forms\Components\TextInput::make('score')
                     ->label('Nilai')
                     ->required()
-                    ->numeric()
-                    ->columnSpanFull(),
+                    ->numeric(),
 
                 Forms\Components\RichEditor::make('comments')
                     ->label('Komentar/Catatan')

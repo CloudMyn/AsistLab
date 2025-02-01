@@ -18,6 +18,17 @@ class MataKuliah extends Model
 
     protected $width = ['frekuensi'];
 
+    protected static function booting()
+    {
+        static::deleting(function ($model) {
+            foreach ($model->frekuensi as $frekuensi) {
+                $frekuensi->update([
+                    'mata_kuliah_id'  =>  null,
+                ]);
+            }
+        });
+    }
+
     public function frekuensi()
     {
         return $this->hasMany(Frekuensi::class, 'mata_kuliah_id', 'id');

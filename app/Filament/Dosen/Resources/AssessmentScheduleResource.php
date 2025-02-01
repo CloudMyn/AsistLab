@@ -31,7 +31,7 @@ class AssessmentScheduleResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = static::getModel()::query()->where('approved_at', '!=', null);
+        $query = static::getModel()::query()->where('approved_at', '!=', null)->where('dosen_id', get_auth_user()->id);
 
         if (
             static::isScopedToTenant() &&
@@ -65,7 +65,7 @@ class AssessmentScheduleResource extends Resource
 
     public static function canDelete(Model $record): bool
     {
-        return false;
+        return true;
     }
 
     public static function form(Form $form): Form

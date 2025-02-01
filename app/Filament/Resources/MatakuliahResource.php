@@ -47,35 +47,35 @@ class MatakuliahResource extends Resource
                     ->numeric()
                     ->maxLength(255),
 
-                Forms\Components\Repeater::make('frekuensis')
-                    ->label('Daftar Frekuensi')
-                    ->columnSpanFull()
-                    ->distinct()
-                    ->createItemButtonLabel('Tambah Frekuensi')
-                    ->deleteAction(
-                        function (Action $action) {
-                            return $action
-                                ->before(function ($component, $get, $state, $arguments) {
+                // Forms\Components\Repeater::make('frekuensis')
+                //     ->label('Daftar Frekuensi')
+                //     ->columnSpanFull()
+                //     ->distinct()
+                //     ->createItemButtonLabel('Tambah Frekuensi')
+                //     ->deleteAction(
+                //         function (Action $action) {
+                //             return $action
+                //                 ->before(function ($component, $get, $state, $arguments) {
 
-                                    $id_frekuensi = $state[$arguments['item']]['id'];
+                //                     $id_frekuensi = $state[$arguments['item']]['id'];
 
-                                    $frekuensi = Frekuensi::find($id_frekuensi);
+                //                     $frekuensi = Frekuensi::find($id_frekuensi);
 
-                                    $frekuensi->update([
-                                        'mata_kuliah_id'  =>  null
-                                    ]);
-                                });
-                        }
-                    )
-                    ->simple(Forms\Components\Select::make('id')->placeholder('Pilih Frekuensi')
-                        ->distinct()
-                        ->options(function ($record) {
-                            if (!$record) {
-                                return Frekuensi::where('mata_kuliah_id', null)->get()->pluck('name', 'id');
-                            }
+                //                     $frekuensi->update([
+                //                         'mata_kuliah_id'  =>  null
+                //                     ]);
+                //                 });
+                //         }
+                //     )
+                //     ->simple(Forms\Components\Select::make('id')->placeholder('Pilih Frekuensi')
+                //         ->distinct()
+                //         ->options(function ($record) {
+                //             if (!$record) {
+                //                 return Frekuensi::where('mata_kuliah_id', null)->get()->pluck('name', 'id');
+                //             }
 
-                            return Frekuensi::get()->pluck('name', 'id');
-                        }))
+                //             return Frekuensi::get()->pluck('name', 'id');
+                //         }))
             ]);
     }
 

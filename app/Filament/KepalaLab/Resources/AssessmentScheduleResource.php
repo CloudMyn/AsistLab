@@ -51,7 +51,7 @@ class AssessmentScheduleResource extends Resource
 
     public static function canDelete(Model $record): bool
     {
-        return false;
+        return true;
     }
 
     public static function form(Form $form): Form
@@ -145,7 +145,7 @@ class AssessmentScheduleResource extends Resource
                             ->success()
                             ->title('Penilaian Asistensi')
                             ->body('Penilaian Asistensi Pada Tanggal ' . $record->jadwal  . '  Berhasil Disetujui')
-                            ->sendToDatabase($record->asisten_id);
+                            ->sendToDatabase($record->asisten_model);
 
                         Notification::make()
                             ->success()
