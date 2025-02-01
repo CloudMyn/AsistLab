@@ -17,6 +17,8 @@ class RoomChat extends Model
         'user_id_praktikan',
     ];
 
+
+
     public function chat_messages()
     {
         return $this->hasMany(ChatMessage::class);
