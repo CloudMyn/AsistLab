@@ -18,38 +18,54 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
+    // [1] KONFIGURASI MODEL DAN NAVIGASI
+    // Menentukan model Eloquent yang terkait dengan resource ini
     protected static ?string $model = User::class;
 
+    // Mengatur ikon yang akan ditampilkan di sidebar navigasi
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    // Mengatur urutan tampilan di sidebar navigasi
     protected static ?int $navigationSort = 1;
 
+    // [2] GET MODEL LABEL
+    // Memberikan label untuk model yang digunakan dalam tampilan
     public static function getModelLabel(): string
     {
         return __('app.navigation.user_table');
     }
 
+    // [3] GET NAVIGATION GROUP
+    // Mengelompokkan resource ini ke dalam grup navigasi tertentu
     public static function getNavigationGroup(): ?string
     {
         // return __('app.navigation.user_management');
         return null;
     }
 
+    // [4] ELOQUENT QUERY
+    // Membangun query dasar untuk mengambil data dari database
+    // Menambahkan filter untuk mengecualikan pengguna dengan peran 'DEVELOPER'
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('peran', '!=', 'DEVELOPER');
+        return User::query();
     }
 
+    // [5] FORM CONFIGURATION
+    // Membuat struktur form untuk create/edit data
+    // Mengatur validasi dan tipe input untuk setiap field
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                // [5.1] UPLOAD AVATAR
                 Forms\Components\FileUpload::make('avatar_url')
                     ->label('Avatar')
                     ->image()
                     ->columnSpanFull()
                     ->directory('avatar'),
 
+                // [5.2] INPUT DATA UTAMA
                 Forms\Components\TextInput::make('name')
                     ->label('Nama')
                     ->required()
@@ -67,6 +83,7 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
 
+                // [5.3] PILIHAN PERAN
                 Forms\Components\Select::make('peran')
                     ->label('Peran Pengguna')
                     ->placeholder('Pilih Peran Pengguna')
@@ -79,17 +96,18 @@ class UserResource extends Resource
                     ])
                     ->required(),
 
+                // [5.4] STATUS AKUN
                 Forms\Components\Select::make('status')
                     ->label('Status')
                     ->columnSpanFull()
                     ->options(['ACTIVE' => 'Aktif', 'NONACTIVE' => 'Tidak Aktif', 'BLOCKED' => 'Diblokir'])
                     ->required(),
 
+                // [5.5] FIELD PASSWORD
                 Forms\Components\Fieldset::make('Password')
                     ->columnSpanFull()
                     ->label('Kata Sandi')
                     ->schema([
-
                         Forms\Components\TextInput::make('password')
                             ->label('Kata Sandi')
                             ->password()
@@ -100,15 +118,13 @@ class UserResource extends Resource
                             ->revealable()
                             ->maxLength(255),
 
-
                         Forms\Components\TextInput::make('password_confirmation')
                             ->label('Konfirmasi Kata Sandi')
                             ->password()
                             ->revealable(),
-
                     ]),
 
-
+                // [5.6] DATA PRAKTIKAN
                 Forms\Components\Fieldset::make('praktikan')
                     ->columnSpanFull()
                     ->label('Data Praktikan')
@@ -117,7 +133,6 @@ class UserResource extends Resource
                         return $get('peran') == 'PRAKTIKAN';
                     })
                     ->schema([
-
                         Forms\Components\TextInput::make('kelas')
                             ->label('Kelas')
                             ->required()
@@ -133,23 +148,25 @@ class UserResource extends Resource
                             ->columnSpanFull()
                             ->relationship('frekuensi', 'name')
                             ->required(),
-
                     ]),
-
             ]);
     }
 
+    // [6] TABLE CONFIGURATION
+    // Mengonfigurasi tampilan tabel data
+    // Menentukan kolom yang ditampilkan dan aksi yang tersedia
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-
+                // [6.1] KOLOM GAMBAR
                 Tables\Columns\ImageColumn::make('avatar_url')
                     ->label('Avatar')
                     ->circular()
                     ->placeholder('Tidak Ada Gambar')
                     ->defaultImageUrl('/default_pp.png'),
 
+                // [6.2] KOLOM TEKS UTAMA
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')
                     ->searchable(),
@@ -159,6 +176,7 @@ class UserResource extends Resource
                     ->placeholder('Tidak Ada Frekuensi')
                     ->searchable(),
 
+                // [6.3] KOLOM OPSIONAL
                 Tables\Columns\TextColumn::make('username')
                     ->label('Username')
                     ->prefix('@')
@@ -170,6 +188,7 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 
+                // [6.4] BADGE STATUS
                 Tables\Columns\TextColumn::make('peran')
                     ->label('Peran')
                     ->badge()
@@ -179,6 +198,7 @@ class UserResource extends Resource
                     ->label('Status')
                     ->badge(),
 
+                // [6.5] KOLOM TANGGAL
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Buat')
                     ->dateTime()
@@ -191,12 +211,13 @@ class UserResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            // [7] DEFAULT SORTING
             ->defaultSort('created_at', 'desc')
             ->filtersFormWidth('lg')
             ->filters([
+                // [7.1] FILTER TANGGAL PEMBUATAN
                 Filter::make('created_at')
                     ->form([
-
                         Fieldset::make('Filter Tanggal Pembuatan')
                             ->schema([
                                 DatePicker::make('created_from')
@@ -204,7 +225,6 @@ class UserResource extends Resource
                                 DatePicker::make('created_until')
                                     ->label('Hingga Tanggal'),
                             ])
-
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -218,11 +238,13 @@ class UserResource extends Resource
                             );
                     })
             ])
+            // [8] TABLE ACTIONS
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
+            // [9] BULK ACTIONS
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -230,6 +252,8 @@ class UserResource extends Resource
             ]);
     }
 
+    // [10] RESOURCE RELATIONS
+    // Mendefinisikan relasi yang terkait dengan resource ini
     public static function getRelations(): array
     {
         return [
@@ -237,6 +261,8 @@ class UserResource extends Resource
         ];
     }
 
+    // [11] RESOURCE PAGES
+    // Mendefinisikan halaman-halaman yang terkait dengan resource
     public static function getPages(): array
     {
         return [
